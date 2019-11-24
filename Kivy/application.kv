@@ -1,0 +1,270 @@
+#:import utils kivy.utils
+
+NavLayout:
+
+    MDNavigationDrawer:
+
+        drawer_logo: 'logo.png'
+        NavigationDrawerSubheader:
+            id : main_win
+            icon: "arrow-all"
+            text: "Menu"
+            color: 0,0,0,1
+
+        NavigationDrawerIconButton:
+            icon: "arrow-all"
+            text:'Posts'
+            on_release: manager.current= 'first'
+        NavigationDrawerIconButton:
+            icon: "arrow-all"
+            text: 'Hashtags'
+            on_release: manager.current= 'third'
+        NavigationDrawerIconButton:
+            icon: "arrow-all"
+            text: 'Time statistics'
+            disabled: True
+        NavigationDrawerIconButton:
+            icon: "arrow-all"
+            text: 'Locations'
+
+
+    WindowManager:
+        id: manager
+        MainWindow:
+            id:'first'
+        SecondWindow:
+            id: 'second'
+        ThirdWindow:
+            id: 'third'
+
+
+
+<MainWindow>
+    name:'first'
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    FloatLayout:
+        size: root.size
+        cols: 1
+        BoxLayout:
+
+            canvas.before:
+                Color:
+                    rgba: utils.get_color_from_hex("#293149")
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            orientation: 'horizontal'
+            pos_hint:{"top": 1, "left": 1}
+            size_hint: 1,.1
+
+            Button:
+                text: 'create a business account'
+                size_hint: 0.1,0.7
+                pos_hint: {"top":0.85}
+                background_color: 0.6,0.6,0.6,1
+
+
+            Button:
+                text:'log in'
+                size_hint: 0.1,0.7
+                pos_hint: {"top":0.85}
+                background_color: 0.6,0.6,0.6,1
+
+        BoxLayout:
+
+
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            orientation: 'vertical'
+            id: box2
+            spacing:dp(25)
+            padding:dp(45)
+            pos_hint:{"top": .85,}
+            size_hint: 1,.6
+
+            Image:
+                source:"logo.png"
+                allow_stretch: True
+
+            TextInput:
+                id: myinput
+                hint_text:'enter the exact instagram account name'
+                size_hint: (1,.3)
+                multiline: False
+                password: False
+                halign: 'center'
+                valign: 'middle'
+
+
+
+            SmoothButton:
+                id: search
+                back_color:"#293149"
+                for_color:"#000000"
+                border_radius: [20]
+                pos_hint:{"top":1, "left":0}
+                size_hint: (1,.4)
+                text: 'search'
+                on_release: self.parent.parent.parent.parent.search(myinput.text)
+
+
+        BoxLayout:
+            canvas.before:
+                Color:
+                    rgba: utils.get_color_from_hex("#293149")
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            pos_hint:{"top":0.1, "left":1}
+            size_hint: 1, .1
+            Label:
+                text:' © Copyright Los Fantasticos'
+
+
+<SmoothButton>:
+    background_color: (0,0,0,0)
+    background_normal:''
+    back_color: ""
+    for_color:""
+    border_radius: [18]
+    canvas.before:
+        Color:
+            rgba: utils.get_color_from_hex(self.back_color) if self.state  == 'normal' else utils.get_color_from_hex(self.for_color)
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: self.border_radius
+
+
+<SecondWindow>
+    name: 'second'
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    GridLayout:
+        cols:1
+        id: box
+        orientation:'vertical'
+        padding: dp(50) , dp(100)
+
+
+        Image:
+            pos_hint:{"top":1,"left":1}
+            id:fond
+            source:"logo.png"
+            opacity: 0
+
+
+<ThirdWindow>
+    name: 'third'
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    FloatLayout:
+        size: root.size
+        cols: 1
+        BoxLayout:
+            id:box
+            canvas.before:
+                Color:
+                    rgba: utils.get_color_from_hex("#293149")
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            orientation: 'horizontal'
+            spacing: (self.width/5)*3
+            pos_hint:{"top": 1, "right": 1}
+            size_hint: 1,.1
+
+            Button:
+                id: menu
+                size_hint: None,1
+                width: self.parent.width/5
+                background_normal:'icon.png'
+                on_release: root.parent.parent.parent.toggle_nav_drawer()
+
+
+
+
+        Label:
+            id: tt
+            color: 0,0,0,1
+            pos_hint:{"top": 1.30, "left": 1}
+
+        BoxLayout:
+            padding: self.width/5, dp(5)
+            pos_hint:{"top": .75, "left": 1}
+            size_hint: 1,.6
+            AsyncImage:
+                id: pp
+                size_hint: None,.6
+                pos_hint:{"top": 1, "left": 1}
+                width: (self.parent.width/5)*3
+
+
+
+        BoxLayout:
+            orientation: 'horizontal'
+            pos_hint:{"top": .85, "left": 1}
+            Label:
+
+                text: 'Followers'
+                color: 0,0,0,1
+
+
+            Label:
+
+                text: 'Followings'
+                color: 0,0,0,1
+
+
+            Label:
+
+                text: 'Posts'
+                color: 0,0,0,1
+
+        BoxLayout:
+            orientation: 'horizontal'
+            pos_hint:{"top": .81, "left": 1}
+            Label:
+
+                id: followers
+                color: 0,0,0,1
+
+
+            Label:
+                id: followings
+                color: 0,0,0,1
+
+
+            Label:
+                id: posts
+                color: 0,0,0,1
+
+
+        BoxLayout:
+            canvas.before:
+                Color:
+                    rgba: utils.get_color_from_hex("#293149")
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            pos_hint:{"top":0.1, "left":1}
+            size_hint: 1, .1
+            Label:
+                text:' © Copyright Los Fantasticos'
