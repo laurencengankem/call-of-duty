@@ -1,0 +1,357 @@
+#:import utils kivy.utils
+
+NavigationLayout:
+
+    MDNavigationDrawer:
+
+        drawer_logo: 'logo.png'
+        NavigationDrawerSubheader:
+            id : main_win
+            icon: "arrow-all"
+            text: "Menu"
+            color: 0,0,0,1
+
+        NavigationDrawerIconButton:
+            icon: "arrow-all"
+            text:'Home'
+            on_release: manager.current= 'first'
+        NavigationDrawerIconButton:
+            icon: "arrow-all"
+            text: 'LogIn'
+            on_release: manager.current= 'login'
+        NavigationDrawerIconButton:
+            icon: "arrow-all"
+            text: 'Register'
+            on_release: manager.current= 'register'
+
+
+    ScreenManager:
+        id:manager
+        name: 'manager'
+        First:
+            name: 'first'
+        Screen:
+            name: 'second'
+        Login:
+            name: 'login'
+        Register:
+            name: 'register'
+        Result:
+            name: 'result'
+
+
+
+<First>
+    BoxLayout:
+        canvas:
+            Color:
+                rgb: 1, 1, 1
+            Rectangle:
+                pos: self.pos
+                size: self.width,self.height/1.08
+                source: 'inst1.png'
+
+        MDToolbar:
+            id: toolbar
+            title: 'Instanalytics'
+            md_bg_color: utils.get_color_from_hex("#293149")
+            pos_hint: {"top":1,}
+            size_hint: 1, .08
+            left_action_items:
+                [["menu", lambda x: app.root.toggle_nav_drawer()]]
+
+    BoxLayout:
+        orientation: 'vertical'
+        spacing:dp(30)
+        padding:dp(45)
+        pos_hint:{"top": .85,}
+        size_hint: 1,.6
+
+        Image:
+            source:"logo.png"
+
+        TextInput:
+            id: myinput
+            hint_text:'enter the account name'
+            size_hint: (.7,.3)
+            font_size: max(self.width/25,12)
+            pos_hint: {"center_x": .5}
+            valign:'middle'
+            multiline: False
+            password: False
+            halign: 'center'
+            valign: 'middle'
+
+        MDRoundFlatButton:
+            text: "Search"
+            text_color: 1,1,1,1
+            pos_hint: {"center_x": .5}
+            md_bg_color: utils.get_color_from_hex("#293149")
+            on_release: app.search(myinput.text)
+
+
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgba: utils.get_color_from_hex("#293149")
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        orientation: 'horizontal'
+        pos_hint:{"top":0.1, "left":1}
+        size_hint: 1,.1
+
+        Label:
+            text: 'Los Fantasticos'
+
+
+<Login>
+    BoxLayout:
+        MDToolbar:
+            id: toolbar
+            title: 'Log In'
+            md_bg_color: utils.get_color_from_hex("#293149")
+            pos_hint: {"top":1,}
+            size_hint: 1, .08
+            left_action_items:
+                [["menu", lambda x: app.root.toggle_nav_drawer()]]
+
+    BoxLayout:
+        canvas:
+            Color:
+                rgb: 1, 1, 1
+            Rectangle:
+                pos: self.pos
+                size: self.width,self.height/1.08
+                source: 'inst1.png'
+        orientation: 'vertical'
+        spacing:dp(20)
+        padding:dp(30),dp(200)
+
+        TextInput:
+            id: username
+            hint_text:'username'
+            size_hint: (.7,None)
+            height: self.parent.height/14
+            pos_hint: {"center_x": .5}
+            multiline: False
+            password: False
+            halign: 'center'
+            valign: 'middle'
+
+        TextInput:
+            id: pwd
+            hint_text:'password'
+            size_hint: (.7,None)
+            height: self.parent.height/14
+            pos_hint: {"center_x": .5}
+            multiline: False
+            password: True
+            halign: 'center'
+            valign: 'middle'
+
+
+        MDRoundFlatButton:
+            text: "Submit"
+            text_color: 1,1,1,1
+            pos_hint: {"center_x": .5}
+            md_bg_color: utils.get_color_from_hex("#293149")
+            on_release: app.show_example_dialog(username.text,pwd.text)
+
+
+
+<Register>
+
+    BoxLayout:
+        MDToolbar:
+            id: toolbar
+            title: 'Registration'
+            md_bg_color: utils.get_color_from_hex("#293149")
+            pos_hint: {"top":1,}
+            size_hint: 1, .08
+            left_action_items:
+                [["menu", lambda x: app.root.toggle_nav_drawer()]]
+
+
+    BoxLayout:
+        canvas:
+            Color:
+                rgb: 1, 1, 1
+            Rectangle:
+                pos: self.pos
+                size: self.width/1,self.height/1.08
+                source: 'inst1.png'
+        orientation: 'vertical'
+        spacing:dp(20)
+        padding:dp(30),dp(150)
+
+
+
+        TextInput:
+            id: user
+            hint_text:'username'
+            size_hint: (.7,None)
+            height: self.parent.height/14
+            pos_hint: {"center_x": .5}
+            multiline: False
+            password: False
+            halign: 'center'
+            valign: 'middle'
+
+        TextInput:
+            id: password
+            hint_text:'password'
+            size_hint: (.7,None)
+            height: self.parent.height/14
+            pos_hint: {"center_x": .5}
+            multiline: False
+            password: True
+            halign: 'center'
+            valign: 'middle'
+
+        TextInput:
+            id: repeat
+            hint_text:'repeat the password'
+            size_hint: (.7,None)
+            height: self.parent.height/14
+            pos_hint: {"center_x": .5}
+            multiline: False
+            password: True
+            halign: 'center'
+            valign: 'middle'
+
+        MDRoundFlatButton:
+            text: "Submit"
+            text_color: 1,1,1,1
+            pos_hint: {"center_x": .5}
+            md_bg_color: utils.get_color_from_hex("#293149")
+            on_release: app.show_example_input_dialog(str(password.text),str(repeat.text),str(user.text))
+
+
+<Result>
+    BoxLayout:
+        orientation:'vertical'
+        MDToolbar:
+            id: toolbar
+            title: 'Instanalytics'
+            md_bg_color: utils.get_color_from_hex("#293149")
+            pos_hint: {"top":.12,}
+            size_hint: 1, .08
+            left_action_items:
+                [["menu", lambda x: app.root.toggle_nav_drawer()]]
+
+
+        MDBottomNavigation:
+            panel_color:utils.get_color_from_hex("#293149")
+            MDBottomNavigationItem:
+                name: "files1"
+                text: "Infos"
+                BoxLayout:
+                    canvas:
+                        Color:
+                            rgb: 1,1,1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.width,self.height
+                            source: 'inst1.png'
+
+                    BoxLayout:
+                        orientation:'vertical'
+                        size_hint: 1,1
+                        padding: self.width/4, dp(5)
+                        Img:
+                            id:imp
+                            width: self.parent.width/2
+                            size_hint: None,.4
+                            pos_hint:{"top":1,"center":0.5,}
+                        BoxLayout:
+                            orientation: 'vertical'
+                            Label:
+                                id: idp
+                                markup: True
+                                text:'Profile ID: '
+                                color:1,1,1,1
+                            Label:
+                                id: type
+                                text:'Profile Type: '
+                                color:1,1,1,1
+                            Label:
+                                id: prof
+                                text:'Profile Name: '
+                                color:1,1,1,1
+
+                            Label:
+                                id: real
+                                text:'Real Name: '
+                                color:1,1,1,1
+                            Label:
+                                id: posts
+                                text:'Posts: '
+                                color:1,1,1,1
+
+                            Label:
+                                id: followers
+                                text:'Followers: '
+                                color:1,1,1,1
+                            Label:
+                                id: followings
+                                text:'Followings: '
+                                color:1,1,1,1
+
+
+            MDBottomNavigationItem:
+                name: "files2"
+                text: "Posts"
+                BoxLayout:
+                    canvas:
+                        Color:
+                            rgb: 1,1,1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.width,self.height
+                            source: 'inst1.png'
+                    ScrollView:
+                        GridLayout:
+                            orientation: 'vertical'
+                            height: self.minimum_height
+                            size_hint_y: None
+                            row_default_height: self.parent.parent.height/1.2
+                            padding: dp(20)
+                            id: ppp
+                            spacing: dp(45)
+                            cols: 1
+
+
+            MDBottomNavigationItem:
+                name: "files3"
+                text: "statistics"
+                BoxLayout:
+                    canvas:
+                        Color:
+                            rgb: 1,1,1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.width,self.height
+                            source: 'inst1.png'
+                    ScrollView:
+                        GridLayout:
+                            orientation: 'vertical'
+                            height: self.minimum_height
+                            size_hint_y: None
+                            row_default_height: self.parent.parent.height/1.2
+                            padding: dp(20)
+                            id: f3
+                            spacing: dp(45)
+                            cols: 1
+
+
+
+<Img@BoxLayout>
+    pop: ''
+    canvas:
+        Color:
+            rgb:1,1,1
+        Ellipse:
+            pos: self.pos
+            size: self.width,self.height
+            source: self.pop
