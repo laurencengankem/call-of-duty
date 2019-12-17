@@ -70,16 +70,14 @@ NavigationLayout:
         Image:
             source:"logo.png"
 
-        TextInput:
+        MDTextFieldRound:
             id: myinput
             hint_text:'enter the account name'
-            size_hint: (.8,.23)
+            size_hint: (.9,.23)
             pos_hint: {"center_x": .5}
-            valign:'middle'
-            multiline: False
-            password: False
-            halign: 'center'
-            valign: 'middle'
+            normal_color: [0,0,0,0.6]
+            icon_type: "left"
+            icon_left:"instlogo.png"
 
         MDRoundFlatButton:
             text: "Search"
@@ -432,6 +430,7 @@ NavigationLayout:
         Rectangle:
             pos: self.pos
             size: self.width,self.val
+
 
 
 

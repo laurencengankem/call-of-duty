@@ -36,3 +36,4 @@ def hash(input):
         #print(str(h[l])+': '+ str(num[l]))
         l=l+1
     return (h,num)
+

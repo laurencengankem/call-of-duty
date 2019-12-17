@@ -9,3 +9,6 @@ class Hashplot(BoxLayout):
 
 class Hashbar(BoxLayout):
     pass
+
+class Enbox(BoxLayout):
+    pass

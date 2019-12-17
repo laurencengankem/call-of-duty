@@ -8,7 +8,7 @@ from kivymd.app import MDApp
 from kivy.network.urlrequest import UrlRequest
 from kivymd.uix.dialog import  MDDialog
 import statis
-from secondfile import Hashplot, Hashbar
+from secondfile import Hashplot, Hashbar, Enbox
 
 import endpoint
 from datetime import datetime
@@ -60,12 +60,18 @@ class Result(Screen):
 
         self.ids.ppp.clear_widgets()
         st= statis.comp('comments',Post)
+        n1=st[1]
         b=Barplot(min_height=st[0],max_height=st[2],avg_height=st[1],norm=st[3])
         self.ids.ppp.add_widget(b)
         st = statis.comp('likes', Post)
+        n2=st[2]
         b=Barplot(min_height=st[0],max_height=st[2],avg_height=st[1],norm=st[3],tit='likes')
         self.ids.ppp.add_widget(b)
         b = BoxLayout(orientation='vertical')
+        er=((n1+n2)/int(Followers))*100
+        e=Enbox()
+        er=round(er,2)
+        e.tt= str(er)+"%"
 
 
         (h1, h2) = statis.hash(Post)
@@ -80,6 +86,7 @@ class Result(Screen):
             h3.size_hint_x= 0.4+ (0.6*(h2[i]/norm))
             h.ids.labval.add_widget(h3)
         self.ids.ppp.add_widget(h)
+        self.ids.ppp.add_widget(e)
 
         b.add_widget(
             Label(text='The Statistics are Based on \nthe Posts Below', font_size='20sp', underline=True,
@@ -149,9 +156,10 @@ class MainApp(MDApp):
                 h=data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['edge_media_to_caption']['edges']
                 hashtags=[]
                 if(len(h)>0):
+
                     txt=data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['edge_media_to_caption']['edges'][0]['node']['text']
                     hashtags=txt.split('#')
-                    if(txt[0]!='#'):
+                    if((len(txt)>0 and txt[0]!='#') or txt==''):
                         hashtags.pop(0)
                 type='Photo'
                 if(t):

@@ -49,3 +49,33 @@
     Label:
         text: self.parent.t
         font_size: sp(12)
+
+
+<EnBox>
+    tt:'0%'
+    padding: dp(10)
+    canvas:
+        Color:
+            rgba:0.4,0,0,0.4
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        padding:dp(0),dp(40)
+        orientation:'vertical'
+        canvas:
+            Color:
+                rgba:0,0,0,0.8
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Image:
+            source: 'trophy.png'
+
+        Label:
+            text: 'Engagement Rate'
+            font_size: self.parent.width/10
+        Label:
+            text: self.parent.parent.tt
+            font_size: self.parent.width/5
+            halign:'center'
