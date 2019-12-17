@@ -7,7 +7,8 @@ from kivy.uix.screenmanager import Screen
 from kivymd.app import MDApp
 from kivy.network.urlrequest import UrlRequest
 from kivymd.uix.dialog import  MDDialog
-import matlab
+import statis
+
 
 import endpoint
 from datetime import datetime
@@ -29,6 +30,8 @@ Post=[]
 class First(Screen):
     pass
 
+class Barplot(BoxLayout):
+    pass
 
 class Login(Screen):
     pass
@@ -54,25 +57,29 @@ class Result(Screen):
         else:
             self.ids.type.text = 'Account Type: Public'
         self.ids.imp.pop= profile
-        i=0
+
         self.ids.ppp.clear_widgets()
+        st= statis.comp('comments',Post)
+        b=Barplot(min_height=st[0],max_height=st[2],avg_height=st[1],norm=st[3])
+        print(st)
+        self.ids.ppp.add_widget(b)
+        st = statis.comp('likes', Post)
+        b=Barplot(min_height=st[0],max_height=st[2],avg_height=st[1],norm=st[3],tit='likes')
+        self.ids.ppp.add_widget(b)
+        b = BoxLayout(orientation='vertical')
+        b.add_widget(
+            Label(text='The Statistics are Based on the Posts Below', font_size='20sp', underline=True, valign="bottom",
+                  halign="center"))
+        self.ids.ppp.add_widget(b)
+
         for i in range(len(Post)):
             box =BoxLayout(orientation='vertical')
             box.add_widget(AsyncImage(source=Post[i]['url'],allow_stretch=True,size_hint=(1,1),pos_hint={"left":1}))
-            box.add_widget(Label(text="comments: "+str(Post[i]['comments'])+' | '+"likes: "+str(Post[i]['likes'])+"\n"+Post[i]['type']+"\n"+Post[i]['date'],size_hint=(1,.2),halign='center'))
+            box.add_widget(Label(text="comments: "+str(Post[i]['comments'])+' | '+"likes: "+str(Post[i]['likes'])+"\n"+Post[i]['type']+"\n"+Post[i]['date'],size_hint=(1,.2),halign='center',valign="top"))
             self.ids.ppp.add_widget(box)
 
-        b = BoxLayout(orientation='vertical')
-        b.add_widget(Label(text='These are the '+str(len(Post))+' Latest Posts \nof ' + str(real) , font_size='15sp',
-                           halign="center"))
-        self.ids.ppp.add_widget(b)
-        self.ids.f3.clear_widgets()
-        boxes=matlab.figure(Post)
-        matlab.hash(Post)
-        self.ids.f3.add_widget(boxes[0])
-        self.ids.f3.add_widget(boxes[1])
-        self.ids.f3.add_widget(boxes[2])
-        self.ids.f3.add_widget(Label(text="The Computation of these statistics\n is based on the \n 12 most recent Posts",halign='center'))
+
+
 
 
 
@@ -113,7 +120,6 @@ class MainApp(MDApp):
             real= str(data['graphql']['user']['full_name'])
             private = data['graphql']['user']['is_private']
             p=len(data['graphql']['user']['edge_owner_to_timeline_media']['edges'])
-            i=0
             Post.clear()
             for i in range(p):
                 url=data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['thumbnail_resources'][2]['src']

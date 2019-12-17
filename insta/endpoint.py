@@ -32,9 +32,3 @@ def request_account_medias(user_id, cursor):
 def request_media_by_location(location_id, location_name):
     return URL + MEDIA_BY_LOCATION % parse.quote_plus(str(location_id), location_name)
 
-
-'''nome= input("insert the account name:  ")
-nome.replace(" ", "")
-url= request_media_info(nome)
-print(url)'''
-
