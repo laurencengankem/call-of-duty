@@ -1,4 +1,4 @@
-import certifi
+import certifi lol
 import os
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.image import AsyncImage
