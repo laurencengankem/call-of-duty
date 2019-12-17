@@ -68,7 +68,7 @@ class Result(Screen):
         self.ids.ppp.add_widget(b)
         b = BoxLayout(orientation='vertical')
         b.add_widget(
-            Label(text='The Statistics are Based on the Posts Below', font_size='20sp', underline=True, valign="bottom",
+            Label(text='The Statistics are Based on \nthe Posts Below', font_size='20sp', underline=True, valign="bottom",
                   halign="center"))
         self.ids.ppp.add_widget(b)
 
