@@ -1,0 +1,14 @@
+prefix=/home/quentin/insta/.buildozer/android/platform/build-armeabi-v7a/build/other_builds/freetype/armeabi-v7a__ndk_target_21/freetype
+exec_prefix=/home/quentin/insta/.buildozer/android/platform/build-armeabi-v7a/build/other_builds/freetype/armeabi-v7a__ndk_target_21/freetype
+libdir=/home/quentin/insta/.buildozer/android/platform/build-armeabi-v7a/build/other_builds/freetype/armeabi-v7a__ndk_target_21/freetype/lib
+includedir=/home/quentin/insta/.buildozer/android/platform/build-armeabi-v7a/build/other_builds/freetype/armeabi-v7a__ndk_target_21/freetype/include/freetype2
+
+Name: FreeType 2
+URL: http://freetype.org
+Description: A free, high-quality, and portable font engine.
+Version: 17.4.11
+Requires:
+Requires.private: 
+Libs: -L${libdir} -lfreetype
+Libs.private: 
+Cflags: -I${includedir}
