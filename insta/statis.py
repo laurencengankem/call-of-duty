@@ -1,4 +1,4 @@
-lol
+
 
 def comp(input1,input2):
     sum=[]
@@ -13,3 +13,26 @@ def comp(input1,input2):
             return [min(sum),round(s/max(len(input2),1)),max(sum),max(sum)+3]
     else:
         return [0,0,0,1]
+
+def hash(input):
+    s=set()
+    for i in range(len(input)):
+        for n in range(len(input[i]['hashtags'])):
+            input[i]['hashtags'][n]= input[i]['hashtags'][n].split(" ")[0]
+            s.add(input[i]['hashtags'][n])
+    h=[]
+    num=[]
+    l=0
+    for x in s:
+
+        c=0
+        for i in range(len(input)):
+            for n in range(len(input[i]['hashtags'])):
+                if(input[i]['hashtags'][n]==x):
+                    c=c+1
+        x = "#" + x
+        h.append(x)
+        num.append(c)
+        #print(str(h[l])+': '+ str(num[l]))
+        l=l+1
+    return (h,num)

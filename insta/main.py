@@ -1,4 +1,4 @@
-import certifi lol
+import certifi
 import os
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.image import AsyncImage
@@ -8,7 +8,7 @@ from kivymd.app import MDApp
 from kivy.network.urlrequest import UrlRequest
 from kivymd.uix.dialog import  MDDialog
 import statis
-
+from secondfile import Hashplot, Hashbar
 
 import endpoint
 from datetime import datetime
@@ -61,14 +61,29 @@ class Result(Screen):
         self.ids.ppp.clear_widgets()
         st= statis.comp('comments',Post)
         b=Barplot(min_height=st[0],max_height=st[2],avg_height=st[1],norm=st[3])
-        print(st)
         self.ids.ppp.add_widget(b)
         st = statis.comp('likes', Post)
         b=Barplot(min_height=st[0],max_height=st[2],avg_height=st[1],norm=st[3],tit='likes')
         self.ids.ppp.add_widget(b)
         b = BoxLayout(orientation='vertical')
+
+
+        (h1, h2) = statis.hash(Post)
+        norm=1
+        if(len(h2)>0):
+            norm = max(h2)+0.5
+        h = Hashplot()
+        for i in range(len(h1)):
+            h.ids.lab.add_widget(Label(text=str(h2[i]), halign='right'))
+            h3 = Hashbar()
+            h3.t= h1[i]
+            h3.size_hint_x= 0.4+ (0.6*(h2[i]/norm))
+            h.ids.labval.add_widget(h3)
+        self.ids.ppp.add_widget(h)
+
         b.add_widget(
-            Label(text='The Statistics are Based on \nthe Posts Below', font_size='20sp', underline=True, valign="bottom",
+            Label(text='The Statistics are Based on \nthe Posts Below', font_size='20sp', underline=True,
+                  valign="bottom",
                   halign="center"))
         self.ids.ppp.add_widget(b)
 
@@ -77,6 +92,8 @@ class Result(Screen):
             box.add_widget(AsyncImage(source=Post[i]['url'],allow_stretch=True,size_hint=(1,1),pos_hint={"left":1}))
             box.add_widget(Label(text="comments: "+str(Post[i]['comments'])+' | '+"likes: "+str(Post[i]['likes'])+"\n"+Post[i]['type']+"\n"+Post[i]['date'],size_hint=(1,.2),halign='center',valign="top"))
             self.ids.ppp.add_widget(box)
+
+
 
 
 

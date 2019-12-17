@@ -1,0 +1,51 @@
+
+<Hashplot>:
+    canvas:
+        Color:
+            rgba:utils.get_color_from_hex("#293149")
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    orientation:'vertical'
+    padding: dp(15)
+    Label:
+        size_hint: 1,.08
+        text: 'Hashtags'
+    BoxLayout:
+        spacing:dp(20)
+        padding:dp(5)
+        canvas:
+            Color:
+                rgba:utils.get_color_from_hex("#4c4c4c")
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        BoxLayout:
+            orientation: 'vertical'
+            id: lab
+            size_hint: .05,1
+        BoxLayout:
+            id: labval
+            spacing: dp(5)
+            orientation: 'vertical'
+            canvas:
+                Color:
+                    rgba:utils.get_color_from_hex("#2c4c4c")
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+<Hashbar>
+    val1: 10
+    val2: 20
+    t:'Like'
+    canvas:
+        Color:
+            rgba:utils.get_color_from_hex("#102549")
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    size_hint_x:None
+    Label:
+        text: self.parent.t
+        font_size: sp(12)
