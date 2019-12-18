@@ -94,9 +94,12 @@ class Result(Screen):
         self.ids.ppp.add_widget(b)
 
         for i in range(len(Post)):
-            box =ImBox(orientation='vertical')
-            box.ss=Post[i]['url']
-            box.add_widget(Label(text="comments: "+str(Post[i]['comments'])+' | '+"likes: "+str(Post[i]['likes'])+"\n"+Post[i]['type']+"\n"+Post[i]['date'],size_hint=(1,.2),halign='center',valign="top"))
+            box = BoxLayout(orientation='vertical')
+            box.add_widget(
+                AsyncImage(source=Post[i]['url'], allow_stretch=True, size_hint=(1, 1), pos_hint={"left": 1}))
+            box.add_widget(Label(
+                text="comments: " + str(Post[i]['comments']) + ' | ' + "likes: " + str(Post[i]['likes']) + "\n" +
+                     Post[i]['type'] + "\n" + Post[i]['date'], size_hint=(1, .2), halign='center', valign="top"))
             self.ids.ppp.add_widget(box)
 
 
