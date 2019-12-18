@@ -12,3 +12,6 @@ class Hashbar(BoxLayout):
 
 class Enbox(BoxLayout):
     pass
+
+class ImBox(BoxLayout):
+    pass

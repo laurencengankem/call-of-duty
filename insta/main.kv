@@ -6,6 +6,7 @@ NavigationLayout:
 
         drawer_logo: 'logo.png'
         NavigationDrawerSubheader:
+
             id : main_win
             icon: "arrow-all"
             text: "Menu"
@@ -72,7 +73,7 @@ NavigationLayout:
 
         MDTextFieldRound:
             id: myinput
-            hint_text:'enter the account name'
+            hint_text:'Profile name'
             size_hint: (.9,.23)
             pos_hint: {"center_x": .5}
             normal_color: [0,0,0,0.6]
@@ -279,49 +280,67 @@ NavigationLayout:
                             pos: self.pos
                             size: self.width,self.height
                             source: 'inst1.png'
-
                     BoxLayout:
-                        orientation:'vertical'
-                        size_hint: 1,1
-                        padding: self.width/4, dp(5)
-                        Img:
-                            id:imp
-                            width: self.parent.width/2
-                            size_hint: None,.4
-                            pos_hint:{"top":1,"center":0.5,}
+                        padding:dp(10),dp(0)
+                        orientation: 'vertical'
+                        BoxLayout:
+                            orientation:'vertical'
+                            size_hint: 1,.32
+                            padding: self.width/3, dp(5)
+
+                            Img:
+                                id:imp
+                                width: self.parent.width/3
+                                size_hint: None,.4
+                                pos_hint:{"top":1,"center":0.5,}
                         BoxLayout:
                             orientation: 'vertical'
-                            Label:
-                                id: idp
-                                markup: True
-                                text:'Profile ID: '
-                                color:1,1,1,1
-                            Label:
-                                id: type
-                                text:'Profile Type: '
-                                color:1,1,1,1
-                            Label:
-                                id: prof
-                                text:'Profile Name: '
-                                color:1,1,1,1
+                            canvas:
+                                Color:
+                                    rgba:0,0,0,0.2
+                                Rectangle:
+                                    pos:self.pos
+                                    size: self.size
+                            BoxLayout:
+                                Label:
+                                    id: idp
+                                    markup: True
+                                    halign:'center'
+                                    text:'[b]Profile ID[/b]'
+                                    color:1,1,1,1
+                                Label:
+                                    id: followers
+                                    markup: True
+                                    halign:'center'
+                                    text:'[b]Followers[/b]'
+                                    color:1,1,1,1
+                            BoxLayout:
+                                Label:
+                                    id: real
+                                    markup: True
+                                    halign:'center'
+                                    text:'[b]Name[/b]'
+                                    color:1,1,1,1
+                                Label:
+                                    id: followings
+                                    halign:'center'
+                                    markup: True
+                                    text:'[b]Followings[/b] '
+                                    color:1,1,1,1
+                            BoxLayout:
+                                Label:
+                                    id: type
+                                    markup: True
+                                    halign:'center'
+                                    text:'[b]Profile Type[/b]'
+                                    color:1,1,1,1
+                                Label:
+                                    id: posts
+                                    markup: True
+                                    halign:'center'
+                                    text:'[b]Posts[/b]'
+                                    color:1,1,1,1
 
-                            Label:
-                                id: real
-                                text:'Real Name: '
-                                color:1,1,1,1
-                            Label:
-                                id: posts
-                                text:'Posts: '
-                                color:1,1,1,1
-
-                            Label:
-                                id: followers
-                                text:'Followers: '
-                                color:1,1,1,1
-                            Label:
-                                id: followings
-                                text:'Followings: '
-                                color:1,1,1,1
 
 
             MDBottomNavigationItem:

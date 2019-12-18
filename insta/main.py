@@ -8,7 +8,7 @@ from kivymd.app import MDApp
 from kivy.network.urlrequest import UrlRequest
 from kivymd.uix.dialog import  MDDialog
 import statis
-from secondfile import Hashplot, Hashbar, Enbox
+from secondfile import Hashplot, Hashbar, Enbox, ImBox
 
 import endpoint
 from datetime import datetime
@@ -46,16 +46,15 @@ class Result(Screen):
     def on_enter(self, *args):
         req = UrlRequest(source,file_path=profile,ca_file=certifi.where(),verify=False)
         req.wait()
-        self.ids.posts.text='Posts: '+Posts
-        self.ids.followers.text = 'Followers: ' + Followers
-        self.ids.followings.text = 'Followings: ' + Followings
-        self.ids.idp.text = 'Profile ID: '+ ID
-        self.ids.prof.text = 'Profile Name: ' + account
-        self.ids.real.text = 'Real Name: ' + real
+        self.ids.posts.text='[b]Posts[/b] \n'+Posts
+        self.ids.followers.text = '[b]Followers[/b] \n' + Followers
+        self.ids.followings.text = '[b]Followings[/b] \n' + Followings
+        self.ids.idp.text = '[b]Profile ID[/b] \n'+ ID
+        self.ids.real.text = '[b]Name[/b] \n' + real
         if(private== True):
-            self.ids.type.text = 'Account Type: Private'
+            self.ids.type.text = '[b]Account Type[/b] \n Private'
         else:
-            self.ids.type.text = 'Account Type: Public'
+            self.ids.type.text = '[b]Account Type[/b] \n Public'
         self.ids.imp.pop= profile
 
         self.ids.ppp.clear_widgets()
@@ -95,14 +94,10 @@ class Result(Screen):
         self.ids.ppp.add_widget(b)
 
         for i in range(len(Post)):
-            box =BoxLayout(orientation='vertical')
-            box.add_widget(AsyncImage(source=Post[i]['url'],allow_stretch=True,size_hint=(1,1),pos_hint={"left":1}))
+            box =ImBox(orientation='vertical')
+            box.ss=Post[i]['url']
             box.add_widget(Label(text="comments: "+str(Post[i]['comments'])+' | '+"likes: "+str(Post[i]['likes'])+"\n"+Post[i]['type']+"\n"+Post[i]['date'],size_hint=(1,.2),halign='center',valign="top"))
             self.ids.ppp.add_widget(box)
-
-
-
-
 
 
 
