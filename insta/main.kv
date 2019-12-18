@@ -26,7 +26,7 @@ NavigationLayout:
             on_release: manager.current= 'register'
 
 
-    ScreenManager:
+    WindowManager:
         id:manager
         name: 'manager'
         First:
@@ -285,7 +285,7 @@ NavigationLayout:
                         orientation: 'vertical'
                         BoxLayout:
                             orientation:'vertical'
-                            size_hint: 1,.32
+                            size_hint: 1,.4
                             padding: self.width/3, dp(5)
 
                             Img:

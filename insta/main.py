@@ -1,9 +1,11 @@
 import certifi
 import os
+
+from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.image import AsyncImage
 from kivy.uix.label import Label
-from kivy.uix.screenmanager import Screen
+from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.app import MDApp
 from kivy.network.urlrequest import UrlRequest
 from kivymd.uix.dialog import  MDDialog
@@ -26,6 +28,15 @@ real=""
 private= False
 
 Post=[]
+
+class WindowManager(ScreenManager):
+    def change(self):
+        sc=self.current_screen.name
+        if(sc=='login' or sc=='register' or sc=='result'):
+            self.current='first'
+            return True
+        else:
+            return False
 
 class First(Screen):
     pass
@@ -112,67 +123,86 @@ class MainApp(MDApp):
         self.profile=''
         super().__init__(**kwargs)
 
+    def on_start(self):
+        Window.bind(on_keyboard=self.android_back_click)
+
+    def android_back_click(self, window, key, *largs):
+
+        if key == 27:
+            if(self.root.children[1].children[0].change()):
+                return True
+
+
     def search(self,input):
+        try:
+            if input != '':
+                input.replace(" ", "")
+                urli = endpoint.request_account_info(input)
+                req=UrlRequest(urli,ca_file=certifi.where(),verify=False)
+                req.wait()
+                data = req.result
+                global source
+                global profile
+                global Followers
+                global Followings
+                global Posts
+                global ID
+                global account
+                global real
+                global Post
+                global private
+                account=input
+                profile = input + '.jpg'
+                source= self.profile
+                self.profile=input+'.jpg'
+                source = data['graphql']['user']['profile_pic_url']
+                Followers = str(data['graphql']['user']['edge_followed_by']['count'])
+                Followings = str(data['graphql']['user']['edge_follow']['count'])
+                Posts = str(data['graphql']['user']['edge_owner_to_timeline_media']['count'])
+                ID= str(data['graphql']['user']['id'])
+                real= str(data['graphql']['user']['full_name'])
+                private = data['graphql']['user']['is_private']
+                p=len(data['graphql']['user']['edge_owner_to_timeline_media']['edges'])
+                Post.clear()
+                for i in range(p):
+                    url=data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['thumbnail_resources'][2]['src']
+                    comments= data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['edge_media_to_comment']['count']
+                    likes= data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['edge_liked_by']['count']
+                    t=data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['is_video']
+                    time= data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['taken_at_timestamp']
+                    date=datetime.fromtimestamp(time)
+                    #print(data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['edge_media_to_caption']['edges'])
+                    h=data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['edge_media_to_caption']['edges']
+                    hashtags=[]
+                    if(len(h)>0):
 
-        if input != '':
-            input.replace(" ", "")
-            urli = endpoint.request_account_info(input)
-            req=UrlRequest(urli,ca_file=certifi.where(),verify=False)
-            req.wait()
-            data = req.result
-            global source
-            global profile
-            global Followers
-            global Followings
-            global Posts
-            global ID
-            global account
-            global real
-            global Post
-            global private
-            account=input
-            profile = input + '.jpg'
-            source= self.profile
-            self.profile=input+'.jpg'
-            source = data['graphql']['user']['profile_pic_url']
-            Followers = str(data['graphql']['user']['edge_followed_by']['count'])
-            Followings = str(data['graphql']['user']['edge_follow']['count'])
-            Posts = str(data['graphql']['user']['edge_owner_to_timeline_media']['count'])
-            ID= str(data['graphql']['user']['id'])
-            real= str(data['graphql']['user']['full_name'])
-            private = data['graphql']['user']['is_private']
-            p=len(data['graphql']['user']['edge_owner_to_timeline_media']['edges'])
-            Post.clear()
-            for i in range(p):
-                url=data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['thumbnail_resources'][2]['src']
-                comments= data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['edge_media_to_comment']['count']
-                likes= data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['edge_liked_by']['count']
-                t=data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['is_video']
-                time= data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['taken_at_timestamp']
-                date=datetime.fromtimestamp(time)
-                #print(data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['edge_media_to_caption']['edges'])
-                h=data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['edge_media_to_caption']['edges']
-                hashtags=[]
-                if(len(h)>0):
+                        txt=data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['edge_media_to_caption']['edges'][0]['node']['text']
+                        hashtags=txt.split('#')
+                        if((len(txt)>0 and txt[0]!='#') or txt==''):
+                            hashtags.pop(0)
+                    type='Photo'
+                    if(t):
+                        type='Video'
 
-                    txt=data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['edge_media_to_caption']['edges'][0]['node']['text']
-                    hashtags=txt.split('#')
-                    if((len(txt)>0 and txt[0]!='#') or txt==''):
-                        hashtags.pop(0)
-                type='Photo'
-                if(t):
-                    type='Video'
-
-                Post.append({"url":url,"comments":comments,"likes":likes,"type":type,"date":str(date),"hashtags": hashtags})
-            self.root.ids.manager.current= 'result'
-        else:
+                    Post.append({"url":url,"comments":comments,"likes":likes,"type":type,"date":str(date),"hashtags": hashtags})
+                self.root.ids.manager.current= 'result'
+            else:
+                dialog = MDDialog(
+                    title="Alert",
+                    size_hint=(0.8, 0.3),
+                    text_button_ok="Ok",
+                    text="Insert an account name"
+                )
+                dialog.open()
+        except:
             dialog = MDDialog(
-                title="Alert",
+                title="Error",
                 size_hint=(0.8, 0.3),
                 text_button_ok="Ok",
-                text="Insert an account name"
+                text="There's no profile corresponding to this name "
             )
             dialog.open()
+
 
     def show_example_input_dialog(self,input1,input2,input3):
 
