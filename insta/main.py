@@ -55,7 +55,7 @@ class Result(Screen):
         super().__init__(**kwargs)
 
     def on_enter(self, *args):
-        req = UrlRequest(source,file_path="/storage/emulated/legacy/"+profile,ca_file=certifi.where(),verify=False)
+        req = UrlRequest(source,file_path=profile,ca_file=certifi.where(),verify=False)
         req.wait()
         self.ids.posts.text='[b]Posts[/b] \n'+Posts
         self.ids.followers.text = '[b]Followers[/b] \n' + Followers
@@ -66,7 +66,14 @@ class Result(Screen):
             self.ids.type.text = '[b]Account Type[/b] \n Private'
         else:
             self.ids.type.text = '[b]Account Type[/b] \n Public'
-        self.ids.imp.pop= "/storage/emulated/legacy/"+profile
+        self.ids.imp.pop= profile
+        dialog = MDDialog(
+            title="Error",
+            size_hint=(0.8, 0.3),
+            text_button_ok="Ok",
+            text=str(os.path.abspath(profile))
+        )
+        dialog.open()
 
         self.ids.ppp.clear_widgets()
         st= statis.comp('comments',Post)
