@@ -12,8 +12,7 @@ from kivy.network.urlrequest import UrlRequest
 from kivymd.uix.button import MDRoundFlatButton
 from kivymd.uix.dialog import  MDDialog
 import statis
-from secondfile import Hashplot, Hashbar, Enbox, ImBox, DownloadButton
-
+from secondfile import Hashplot, Hashbar, Enbox, ImBox, DownloadButton, MostBox
 
 import endpoint
 from datetime import datetime
@@ -77,7 +76,8 @@ class Result(Screen):
         b=Barplot(min_height=st[0],max_height=st[2],avg_height=st[1],norm=st[3])
         self.ids.ppp.add_widget(b)
         st = statis.comp('likes', Post)
-        n2=st[2]
+        n2=st[1]
+        maxim=st[2]
         b=Barplot(min_height=st[0],max_height=st[2],avg_height=st[1],norm=st[3],tit='likes')
         self.ids.ppp.add_widget(b)
         b = BoxLayout(orientation='vertical')
@@ -85,6 +85,7 @@ class Result(Screen):
         e=Enbox()
         er=round(er,2)
         e.tt= str(er)+"%"
+        ind=statis.mostliked(Post,maxim)
 
 
         (h1, h2) = statis.hash(Post)
@@ -99,6 +100,14 @@ class Result(Screen):
             h3.size_hint_x= 0.4+ (0.6*(h2[i]/norm))
             h.ids.labval.add_widget(h3)
         self.ids.ppp.add_widget(h)
+        if (len(Post) > 0):
+            m = MostBox()
+            m.ss = Post[ind]['url']
+            m.likes=Post[ind]['likes']
+            for i in range(len(Post[ind]['hashtags'])):
+                m.ids.list.text= m.ids.list.text+'\n #'+Post[ind]['hashtags'][i]
+            self.ids.ppp.add_widget(m)
+
         self.ids.ppp.add_widget(e)
 
         b.add_widget(
@@ -116,7 +125,7 @@ class Result(Screen):
                      Post[i]['type'] + "\n" + Post[i]['date'], size_hint=(1, .2), halign='center', valign="top"))
             b=DownloadButton()
             b.link=Post[i]['url']
-            b.path= str(Post[i]['shortcode'])+'.jpg'
+            b.path= '/sdcard/download/'+str(Post[i]['shortcode'])+'.jpg'
             box.add_widget(b)
             self.ids.ppp.add_widget(box)
 
