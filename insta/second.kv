@@ -99,3 +99,40 @@
     icon: "download"
     pos_hint: {"center_x": 0.5,}
     on_release: self.download()
+
+<MostBox>
+    orientation: 'vertical'
+    padding: dp(10)
+    ss: 'logo.png'
+    likes:0
+    spacing: dp(10)
+    canvas:
+        Color:
+            rgba:0,0,0,0.6
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    Label:
+        color:utils.get_color_from_hex("#FFD700")
+        font_size: self.parent.width/10
+        text: 'Most Liked Post'
+        size_hint:1,.15
+    BoxLayout:
+        AsyncImage:
+            source: self.parent.parent.ss
+            allow_stretch: True
+        BoxLayout:
+            padding:dp(5),dp(20)
+            orientation:'vertical'
+            Label:
+                markup: True
+                halign:'center'
+                pos_hint:{"top":.6,}
+                text: '[b]Likes[/b]'+'\n'+str(self.parent.parent.parent.likes)
+            Label:
+                markup: True
+                id: list
+                halign:'center'
+                text: '[b]Hashtags[/b]'
+
+

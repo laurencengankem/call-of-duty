@@ -19,6 +19,9 @@ def hash(input):
     for i in range(len(input)):
         for n in range(len(input[i]['hashtags'])):
             input[i]['hashtags'][n]= input[i]['hashtags'][n].split(" ")[0]
+            if input[i]['hashtags'][n]== '':
+                input[i]['hashtags'].pop(n)
+                break
             s.add(input[i]['hashtags'][n])
     h=[]
     num=[]
@@ -37,3 +40,7 @@ def hash(input):
         l=l+1
     return (h,num)
 
+def mostliked(input,Max):
+    for i in range(len(input)):
+        if input[i]['likes']== Max:
+            return i
