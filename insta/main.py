@@ -19,6 +19,7 @@ from datetime import datetime
 
 os.environ['SSL_CERT_FILE']= certifi.where()
 
+bio=""
 account=""
 source=""
 profile: str=""
@@ -64,6 +65,7 @@ class Result(Screen):
         self.ids.followings.text = '[b]Followings[/b] \n' + Followings
         self.ids.idp.text = '[b]Profile ID[/b] \n'+ ID
         self.ids.real.text = '[b]Name[/b] \n' + real
+        self.ids.bio.text='[b]Biography[/b] \n'+bio
         if(private== True):
             self.ids.type.text = '[b]Account Type[/b] \n Private'
         else:
@@ -73,11 +75,12 @@ class Result(Screen):
         self.ids.ppp.clear_widgets()
         st= statis.comp('comments',Post)
         n1=st[1]
+        maxim2=st[2]
         b=Barplot(min_height=st[0],max_height=st[2],avg_height=st[1],norm=st[3])
         self.ids.ppp.add_widget(b)
         st = statis.comp('likes', Post)
         n2=st[1]
-        maxim=st[2]
+        maxim1=st[2]
         b=Barplot(min_height=st[0],max_height=st[2],avg_height=st[1],norm=st[3],tit='likes')
         self.ids.ppp.add_widget(b)
         b = BoxLayout(orientation='vertical')
@@ -85,7 +88,7 @@ class Result(Screen):
         e=Enbox()
         er=round(er,2)
         e.tt= str(er)+"%"
-        ind=statis.mostliked(Post,maxim)
+        ind=statis.mostliked(Post,maxim1)
 
 
         (h1, h2) = statis.hash(Post)
@@ -107,6 +110,7 @@ class Result(Screen):
             for i in range(len(Post[ind]['hashtags'])):
                 m.ids.list.text= m.ids.list.text+'\n #'+Post[ind]['hashtags'][i]
             self.ids.ppp.add_widget(m)
+
 
         self.ids.ppp.add_widget(e)
 
@@ -167,6 +171,7 @@ class MainApp(MDApp):
                 global real
                 global Post
                 global private
+                global bio
                 account=input
                 profile = input + '.jpg'
                 source= self.profile
@@ -175,6 +180,7 @@ class MainApp(MDApp):
                 Followers = str(data['graphql']['user']['edge_followed_by']['count'])
                 Followings = str(data['graphql']['user']['edge_follow']['count'])
                 Posts = str(data['graphql']['user']['edge_owner_to_timeline_media']['count'])
+                bio=data['graphql']['user']['biography']
                 ID= str(data['graphql']['user']['id'])
                 real= str(data['graphql']['user']['full_name'])
                 private = data['graphql']['user']['is_private']
