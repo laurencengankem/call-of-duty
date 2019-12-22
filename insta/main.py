@@ -3,14 +3,17 @@ import os
 
 from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
 from kivy.uix.image import AsyncImage
 from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.app import MDApp
 from kivy.network.urlrequest import UrlRequest
+from kivymd.uix.button import MDRoundFlatButton
 from kivymd.uix.dialog import  MDDialog
 import statis
-from secondfile import Hashplot, Hashbar, Enbox, ImBox
+from secondfile import Hashplot, Hashbar, Enbox, ImBox, DownloadButton
+
 
 import endpoint
 from datetime import datetime
@@ -67,13 +70,6 @@ class Result(Screen):
         else:
             self.ids.type.text = '[b]Account Type[/b] \n Public'
         self.ids.imp.pop= profile
-        dialog = MDDialog(
-            title="Error",
-            size_hint=(0.8, 0.3),
-            text_button_ok="Ok",
-            text=str(os.path.abspath(profile))
-        )
-        dialog.open()
 
         self.ids.ppp.clear_widgets()
         st= statis.comp('comments',Post)
@@ -118,6 +114,10 @@ class Result(Screen):
             box.add_widget(Label(
                 text="comments: " + str(Post[i]['comments']) + ' | ' + "likes: " + str(Post[i]['likes']) + "\n" +
                      Post[i]['type'] + "\n" + Post[i]['date'], size_hint=(1, .2), halign='center', valign="top"))
+            b=DownloadButton()
+            b.link=Post[i]['url']
+            b.path= str(Post[i]['shortcode'])+'.jpg'
+            box.add_widget(b)
             self.ids.ppp.add_widget(box)
 
 
@@ -142,7 +142,7 @@ class MainApp(MDApp):
 
     def search(self,input):
         try:
-            if input != '':
+            if input !='':
                 input.replace(" ", "")
                 urli = endpoint.request_account_info(input)
                 req=UrlRequest(urli,ca_file=certifi.where(),verify=False)
@@ -178,7 +178,7 @@ class MainApp(MDApp):
                     t=data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['is_video']
                     time= data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['taken_at_timestamp']
                     date=datetime.fromtimestamp(time)
-                    #print(data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['edge_media_to_caption']['edges'])
+                    shortcode=data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['shortcode']
                     h=data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['edge_media_to_caption']['edges']
                     hashtags=[]
                     if(len(h)>0):
@@ -191,14 +191,14 @@ class MainApp(MDApp):
                     if(t):
                         type='Video'
 
-                    Post.append({"url":url,"comments":comments,"likes":likes,"type":type,"date":str(date),"hashtags": hashtags})
+                    Post.append({"url":url,"comments":comments,"likes":likes,"type":type,"date":str(date),"hashtags": hashtags,"shortcode":shortcode})
                 self.root.ids.manager.current= 'result'
-            else:
+            elif(input== ''):
                 dialog = MDDialog(
                     title="Alert",
                     size_hint=(0.8, 0.3),
                     text_button_ok="Ok",
-                    text="Insert an account name"
+                    text='insert a profile name'
                 )
                 dialog.open()
         except:

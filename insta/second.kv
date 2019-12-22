@@ -92,3 +92,10 @@
             size: self.size
     AsyncImage:
         source: self.parent.ss
+
+
+<DownloadButton>:
+    text: "Download file"
+    icon: "download"
+    pos_hint: {"center_x": 0.5,}
+    on_release: self.download()
