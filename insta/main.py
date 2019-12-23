@@ -29,6 +29,7 @@ Posts=""
 ID=""
 real=""
 private= False
+ver= False
 
 Post=[]
 
@@ -66,6 +67,7 @@ class Result(Screen):
         self.ids.idp.text = '[b]Profile ID[/b] \n'+ ID
         self.ids.real.text = '[b]Name[/b] \n' + real
         self.ids.bio.text='[b]Biography[/b] \n'+bio
+        self.ids.ver.text = '[b]Verified[/b] \n' + str(ver)
         if(private== True):
             self.ids.type.text = '[b]Account Type[/b] \n Private'
         else:
@@ -124,9 +126,16 @@ class Result(Screen):
             box = BoxLayout(orientation='vertical')
             box.add_widget(
                 AsyncImage(source=Post[i]['url'], allow_stretch=True, size_hint=(1, 1), pos_hint={"left": 1}))
-            box.add_widget(Label(
-                text="comments: " + str(Post[i]['comments']) + ' | ' + "likes: " + str(Post[i]['likes']) + "\n" +
-                     Post[i]['type'] + "\n" + Post[i]['date'], size_hint=(1, .2), halign='center', valign="top"))
+            if Post[i]['type']== 'Video':
+                box.add_widget(Label(
+                    text="comments: " + str(Post[i]['comments']) + ' | ' + "likes: " + str(Post[i]['likes']) + "\n" +
+                         Post[i]['type']+" | Views : "+str(Post[i]['view']) + "\n location: "+str(Post[i]['location'])+"\n"+ Post[i]['date'], size_hint=(1, .25), halign='center', valign="top"))
+            else:
+                box.add_widget(Label(
+                    text="comments: " + str(Post[i]['comments']) + ' | ' + "likes: " + str(Post[i]['likes']) + "\n" +
+                         Post[i]['type'] + "\n location: " + str(
+                        Post[i]['location']) + "\n" + Post[i]['date'], size_hint=(1, .25), halign='center',
+                    valign="top"))
             b=DownloadButton()
             b.link=Post[i]['url']
             b.path= '/sdcard/download/'+str(Post[i]['shortcode'])+'.jpg'
@@ -172,6 +181,7 @@ class MainApp(MDApp):
                 global Post
                 global private
                 global bio
+                global ver
                 account=input
                 profile = input + '.jpg'
                 source= self.profile
@@ -183,6 +193,7 @@ class MainApp(MDApp):
                 bio=data['graphql']['user']['biography']
                 ID= str(data['graphql']['user']['id'])
                 real= str(data['graphql']['user']['full_name'])
+                ver=data['graphql']['user']['is_verified']
                 private = data['graphql']['user']['is_private']
                 p=len(data['graphql']['user']['edge_owner_to_timeline_media']['edges'])
                 Post.clear()
@@ -194,19 +205,23 @@ class MainApp(MDApp):
                     time= data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['taken_at_timestamp']
                     date=datetime.fromtimestamp(time)
                     shortcode=data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['shortcode']
+                    location=data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['location']
+                    if(location != None):
+                        location=location['name']
                     h=data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['edge_media_to_caption']['edges']
                     hashtags=[]
                     if(len(h)>0):
-
                         txt=data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['edge_media_to_caption']['edges'][0]['node']['text']
                         hashtags=txt.split('#')
                         if((len(txt)>0 and txt[0]!='#') or txt==''):
                             hashtags.pop(0)
                     type='Photo'
+                    count=0
                     if(t):
                         type='Video'
+                        count=data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['video_view_count']
 
-                    Post.append({"url":url,"comments":comments,"likes":likes,"type":type,"date":str(date),"hashtags": hashtags,"shortcode":shortcode})
+                    Post.append({"url":url,"comments":comments,"likes":likes,"type":type,"date":str(date),"hashtags": hashtags,"shortcode":shortcode,"location":location,"view":count})
                 self.root.ids.manager.current= 'result'
             elif(input== ''):
                 dialog = MDDialog(

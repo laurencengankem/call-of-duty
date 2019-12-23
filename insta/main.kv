@@ -297,8 +297,8 @@ NavigationLayout:
 
                                     Img:
                                         id:imp
-                                        width: self.parent.width/3
-                                        size_hint: None,.4
+                                        width: self.parent.width/3.5
+                                        size_hint: None,.6
                                         pos_hint:{"top":1,"center":0.5,}
                                 BoxLayout:
                                     orientation: 'vertical'
@@ -359,6 +359,12 @@ NavigationLayout:
                                         halign: 'center'
                                         text:'[b]External Links[/b]'
 
+                                    Label:
+                                        id: ver
+                                        markup: True
+                                        halign: 'center'
+                                        text:'[b]Verified[/b]'
+
 
 
             MDBottomNavigationItem:
@@ -377,7 +383,7 @@ NavigationLayout:
                             orientation: 'vertical'
                             height: self.minimum_height
                             size_hint_y: None
-                            row_default_height: self.parent.parent.height/1.2
+                            row_default_height: self.parent.parent.height/1.1
                             padding: dp(20)
                             id: ppp
                             spacing: dp(45)
