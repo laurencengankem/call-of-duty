@@ -24,6 +24,10 @@ NavigationLayout:
             icon: "arrow-all"
             text: 'Register'
             on_release: manager.current= 'register'
+        NavigationDrawerIconButton:
+            icon: "arrow-all"
+            text: 'Comparaison'
+            on_release: manager.current= 'comparaison'
 
 
     WindowManager:
@@ -39,6 +43,10 @@ NavigationLayout:
             name: 'register'
         Result:
             name: 'result'
+        Comparaison:
+            name: 'comparison'
+        CompResult:
+            name: 'compresult'
 
 
 
@@ -173,7 +181,6 @@ NavigationLayout:
 
 
 <Register>
-
     BoxLayout:
         MDToolbar:
             id: toolbar
