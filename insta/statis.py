@@ -36,11 +36,15 @@ def hash(input):
         x = "#" + x
         h.append(x)
         num.append(c)
-        #print(str(h[l])+': '+ str(num[l]))
         l=l+1
     return (h,num)
 
 def mostliked(input,Max):
     for i in range(len(input)):
         if input[i]['likes']== Max:
+            return i
+
+def mostcommented(input,Max):
+    for i in range(len(input)):
+        if input[i]['comments']== Max:
             return i

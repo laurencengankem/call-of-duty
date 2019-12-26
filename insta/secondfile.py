@@ -1,4 +1,5 @@
 import certifi
+from kivy.metrics import sp
 from kivy.network.urlrequest import UrlRequest
 from kivy.uix.boxlayout import BoxLayout
 from kivy.lang import Builder
@@ -8,10 +9,10 @@ from kivymd.toast import toast
 from kivymd.uix.button import MDRoundFlatButton, MDRoundFlatIconButton
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.progressloader import MDProgressLoader
-import os
+import statis
+
 import endpoint
 
-os.environ['SSL_CERT_FILE']= certifi.where()
 kv = Builder.load_file("second.kv")
 
 info1={}
@@ -71,21 +72,57 @@ class CompResult(Screen):
         super().__init__(**kwargs)
 
     def on_enter(self, *args):
-        req1=UrlRequest(info1['source'],file_path=info1['profile']+".jpg",ca_file=certifi.where(),verify=False)
-        req2=UrlRequest(info2['source'],file_path=info2['profile']+".jpg",ca_file=certifi.where(),verify=False)
+        req1=UrlRequest(info1['source'],file_path=info1['profile']+".jpg")
+        req2=UrlRequest(info2['source'],file_path=info2['profile']+".jpg")
         req1.wait()
         req2.wait()
         self.ids.imp1.pop= info1['profile']+".jpg"
         self.ids.imp2.pop = info2['profile']+".jpg"
-        self.ids.b1.ids.nome.text= info1['profile']
-        self.ids.b2.ids.nome.text = info2['profile']
+        self.ids.b1.ids.nome.text= "[b]"+info1['profile']+"[/b]"
+        self.ids.b2.ids.nome.text = "[b]"+info2['profile']+"[/b]"
         self.ids.b1.ids.followers.text="[b]Followers[/b] \n"+info1['Followers']
         self.ids.b1.ids.followings.text = "[b]Followings[/b] \n" + info1['Followings']
         self.ids.b1.ids.posts.text = "[b]Posts[/b] \n" + info1['Posts']
+        self.ids.b1.ids.avg_c.text = "[b]comments/post[/b] \n" + str(info1['avg_com'])
+        self.ids.b1.ids.avg_l.text = "[b]likes/post[/b] \n" + str(info1['avg_likes'])
+        er1 = (info1['avg_com'] + info1['avg_likes']) / int(info1['Followers'])*100
+        self.ids.b1.ids.er.text = "[b]E.R[/b] \n" + str(round(er1,2))+"%"
+
+        (h1, h2) = statis.hash(info1['Post'])
+        norm = 1
+        if (len(h2) > 0):
+            norm = max(h2) + 0.5
+        h = Hashplot()
+        for i in range(len(h1)):
+            h.ids.lab.add_widget(Label(text=str(h2[i]), halign='right',color=(0,0,0.7,1)))
+            h3 = Hashbar()
+            h3.siz=sp(10)
+            h3.t = h1[i]
+            h3.size_hint_x = 0.4 + (0.6 * (h2[i] / norm))
+            h.ids.labval.add_widget(h3)
+        self.ids.box1.add_widget(h)
+
         self.ids.b2.ids.followers.text = "[b]Followers[/b] \n" + info2['Followers']
         self.ids.b2.ids.followings.text = "[b]Followings[/b] \n" + info2['Followings']
         self.ids.b2.ids.posts.text = "[b]Posts[/b] \n" + info2['Posts']
+        self.ids.b2.ids.avg_c.text = "[b]comments/post[/b] \n" + str(info2['avg_com'])
+        self.ids.b2.ids.avg_l.text = "[b]likes/post[/b] \n" + str(info2['avg_likes'])
+        er2=(info2['avg_com'] + info2['avg_likes']) / int(info2['Followers'])*100
+        self.ids.b2.ids.er.text = "[b]E.R[/b] \n" + str(round(er2,2))+"%"
 
+        (h1, h2) = statis.hash(info2['Post'])
+        norm = 1
+        if (len(h2) > 0):
+            norm = max(h2) + 0.5
+        h = Hashplot()
+        for i in range(len(h1)):
+            h.ids.lab.add_widget(Label(text=str(h2[i]), halign='right',color=(0,0.6,0,1)))
+            h3 = Hashbar()
+            h3.siz=sp(10)
+            h3.t = h1[i]
+            h3.size_hint_x = 0.4 + (0.6 * (h2[i] / norm))
+            h.ids.labval.add_widget(h3)
+        self.ids.box2.add_widget(h)
 
 
 
@@ -143,4 +180,22 @@ def extract(data,input):
     Followers = str(data['graphql']['user']['edge_followed_by']['count'])
     Followings = str(data['graphql']['user']['edge_follow']['count'])
     Posts = str(data['graphql']['user']['edge_owner_to_timeline_media']['count'])
-    return {"profile":input,"source":source,"Followers":Followers,"Followings":Followings,"Posts":Posts}
+    p = len(data['graphql']['user']['edge_owner_to_timeline_media']['edges'])
+    post=[]
+    for i in range(p):
+        comments = data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['edge_media_to_comment']['count']
+        likes = data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['edge_liked_by']['count']
+        h = data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['edge_media_to_caption']['edges']
+        hashtags = []
+        if (len(h) > 0):
+            txt = data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['edge_media_to_caption']['edges'][0]['node']['text']
+            hashtags = txt.split('#')
+            if ((len(txt) > 0 and txt[0] != '#') or txt == ''):
+                hashtags.pop(0)
+        post.append({"comments": comments, "likes": likes,"hashtags":hashtags})
+
+    mc=statis.comp('comments',post)
+    ml=statis.comp('likes',post)
+
+    return {"profile":input,"source":source,"Followers":Followers,"Followings":Followings,"Posts":Posts,"avg_com":mc[1],"avg_likes":ml[1],"Post":post}
+

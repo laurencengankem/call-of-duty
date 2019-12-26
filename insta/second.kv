@@ -39,6 +39,7 @@
     val1: 10
     val2: 20
     t:'Like'
+    siz: sp(12)
     canvas:
         Color:
             rgba:utils.get_color_from_hex("#102549")
@@ -48,7 +49,7 @@
     size_hint_x:None
     Label:
         text: self.parent.t
-        font_size: sp(12)
+        font_size: self.parent.siz
 
 
 <EnBox>
@@ -156,8 +157,8 @@
 
     BoxLayout:
         orientation: 'vertical'
-        spacing:dp(30)
-        padding:dp(45)
+        spacing:dp(50)
+        padding:dp(15),dp(45)
         pos_hint:{"top": .85,}
         size_hint: 1,.6
 
@@ -209,7 +210,7 @@
     BoxLayout:
         MDToolbar:
             id: toolbar
-            title: 'Registration'
+            title: 'Comparison'
             md_bg_color: utils.get_color_from_hex("#293149")
             pos_hint: {"top":1,}
             size_hint: 1, .12
@@ -226,39 +227,49 @@
                 size: self.width/1,self.height/1.12
                 source: 'inst1.png'
         orientation: 'horizontal'
-        spacing:dp(20)
-        padding:dp(30),dp(80)
+        padding:dp(20),dp(80)
 
-        BoxLayout:
-            orientation:'vertical'
-            BoxLayout:
-                pos_hint:{"top":1}
-                orientation:'vertical'
-                size_hint: 1.3,.25
-                padding: self.width/7, dp(5)
-                Img:
-                    id:imp1
-                    width: self.parent.width/2
-                    size_hint: None,1
-                    pos_hint:{"top":1,"center":0.5,}
-            Box:
-                id: b1
+        ScrollView:
+            GridLayout:
+                padding:dp(10),dp(0)
+                orientation: 'vertical'
+                height: self.minimum_height
+                size_hint_y: None
+                row_default_height: self.parent.parent.height*1.8
+                cols:1
+                BoxLayout:
+                    BoxLayout:
+                        orientation:'vertical'
+                        id: box1
+                        BoxLayout:
+                            pos_hint:{"top":1}
+                            orientation:'vertical'
+                            size_hint: 1.3,.25
+                            padding: self.width/7, dp(5)
+                            Img:
+                                id:imp1
+                                width: self.parent.width/2
+                                size_hint: None,1
+                                pos_hint:{"top":1,"center":0.5,}
+                        Box:
+                            id: b1
 
-        BoxLayout:
-            orientation:'vertical'
-            BoxLayout:
-                pos_hint:{"top":1}
-                orientation:'vertical'
-                size_hint: 1.3,.25
-                padding: self.width/7, dp(5)
-                Img:
-                    id:imp2
-                    width: self.parent.width/2
-                    size_hint: None,1
-                    pos_hint:{"top":1,"center":0.5,}
-            Box:
-                id: b2
-                col: 0,0.4,0.3,1
+                    BoxLayout:
+                        orientation:'vertical'
+                        id:box2
+                        BoxLayout:
+                            pos_hint:{"top":1}
+                            orientation:'vertical'
+                            size_hint: 1.3,.25
+                            padding: self.width/7, dp(5)
+                            Img:
+                                id:imp2
+                                width: self.parent.width/2
+                                size_hint: None,1
+                                pos_hint:{"top":1,"center":0.5,}
+                        Box:
+                            id: b2
+                            col: 0,0.4,0.3,1
 
     BoxLayout:
         canvas.before:
@@ -276,7 +287,7 @@
 
 
 <Box>
-    col: 0,0,0.4,1
+    col: 0,0,0.7,1
     BoxLayout:
         padding:dp(5)
         canvas:
@@ -296,6 +307,7 @@
                     size: self.size
             Label:
                 size_hint:1,.2
+                markup:True
                 id:nome
                 text: "name"
             BoxLayout:
@@ -320,6 +332,18 @@
                 Label:
                     markup: True
                     id: posts
+                    halign: 'center'
+                Label:
+                    markup: True
+                    id: avg_c
+                    halign: 'center'
+                Label:
+                    markup: True
+                    id: avg_l
+                    halign: 'center'
+                Label:
+                    markup: True
+                    id: er
                     halign: 'center'
 
 
