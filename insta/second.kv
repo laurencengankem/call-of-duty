@@ -227,7 +227,7 @@
                 size: self.width/1,self.height/1.12
                 source: 'inst1.png'
         orientation: 'horizontal'
-        padding:dp(20),dp(80)
+        padding:dp(20),dp(70)
 
         ScrollView:
             GridLayout:
@@ -240,7 +240,6 @@
                 BoxLayout:
                     BoxLayout:
                         orientation:'vertical'
-                        id: box1
                         BoxLayout:
                             pos_hint:{"top":1}
                             orientation:'vertical'
@@ -253,10 +252,12 @@
                                 pos_hint:{"top":1,"center":0.5,}
                         Box:
                             id: b1
+                        BoxLayout:
+                            id: box1
+
 
                     BoxLayout:
                         orientation:'vertical'
-                        id:box2
                         BoxLayout:
                             pos_hint:{"top":1}
                             orientation:'vertical'
@@ -270,6 +271,8 @@
                         Box:
                             id: b2
                             col: 0,0.4,0.3,1
+                        BoxLayout:
+                            id:box2
 
     BoxLayout:
         canvas.before:

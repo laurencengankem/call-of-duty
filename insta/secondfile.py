@@ -96,10 +96,11 @@ class CompResult(Screen):
         for i in range(len(h1)):
             h.ids.lab.add_widget(Label(text=str(h2[i]), halign='right',color=(0,0,0.7,1)))
             h3 = Hashbar()
-            h3.siz=sp(10)
+            h3.siz=sp(9)
             h3.t = h1[i]
             h3.size_hint_x = 0.4 + (0.6 * (h2[i] / norm))
             h.ids.labval.add_widget(h3)
+        self.ids.box1.clear_widgets()
         self.ids.box1.add_widget(h)
 
         self.ids.b2.ids.followers.text = "[b]Followers[/b] \n" + info2['Followers']
@@ -110,6 +111,7 @@ class CompResult(Screen):
         er2=(info2['avg_com'] + info2['avg_likes']) / int(info2['Followers'])*100
         self.ids.b2.ids.er.text = "[b]E.R[/b] \n" + str(round(er2,2))+"%"
 
+
         (h1, h2) = statis.hash(info2['Post'])
         norm = 1
         if (len(h2) > 0):
@@ -118,10 +120,11 @@ class CompResult(Screen):
         for i in range(len(h1)):
             h.ids.lab.add_widget(Label(text=str(h2[i]), halign='right',color=(0,0.6,0,1)))
             h3 = Hashbar()
-            h3.siz=sp(10)
+            h3.siz=sp(9)
             h3.t = h1[i]
             h3.size_hint_x = 0.4 + (0.6 * (h2[i] / norm))
             h.ids.labval.add_widget(h3)
+        self.ids.box2.clear_widgets()
         self.ids.box2.add_widget(h)
 
 
