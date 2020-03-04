@@ -36,7 +36,7 @@ Post=[]
 class WindowManager(ScreenManager):
     def change(self):
         sc=self.current_screen.name
-        if(sc=='login' or sc=='register' or sc=='result'):
+        if( sc=='result'):
             self.current='first'
             return True
         else:
@@ -48,11 +48,6 @@ class First(Screen):
 class Barplot(BoxLayout):
     pass
 
-class Login(Screen):
-    pass
-
-class Register(Screen):
-    pass
 
 class Result(Screen):
     def __init__(self, **kwargs):
@@ -66,7 +61,6 @@ class Result(Screen):
         self.ids.followings.text = '[b]Followings[/b] \n' + Followings
         self.ids.idp.text = '[b]Profile ID[/b] \n'+ ID
         self.ids.real.text = '[b]Name[/b] \n' + real
-        self.ids.bio.text='[b]Biography[/b] \n'+bio
         self.ids.ver.text = '[b]Verified[/b] \n' + str(ver)
         if(private== True):
             self.ids.type.text = '[b]Account Type[/b] \n Private'
@@ -169,6 +163,8 @@ class MainApp(MDApp):
                 urli = endpoint.request_account_info(input)
                 req=UrlRequest(urli,ca_file=certifi.where(),verify=False)
                 req.wait()
+                #req2=UrlRequest('http://localhost:5000/s/'+input,ca_file=certifi.where(),verify=False)
+                #req2.wait()
                 data = req.result
                 global source
                 global profile

@@ -18,16 +18,10 @@ NavigationLayout:
             on_release: manager.current= 'first'
         NavigationDrawerIconButton:
             icon: "arrow-all"
-            text: 'LogIn'
-            on_release: manager.current= 'login'
-        NavigationDrawerIconButton:
-            icon: "arrow-all"
-            text: 'Register'
-            on_release: manager.current= 'register'
-        NavigationDrawerIconButton:
-            icon: "arrow-all"
-            text: 'Comparison'
-            on_release: manager.current= 'comparison'
+            text:'Analysis'
+
+
+
 
 
     WindowManager:
@@ -35,18 +29,9 @@ NavigationLayout:
         name: 'manager'
         First:
             name: 'first'
-        Screen:
-            name: 'second'
-        Login:
-            name: 'login'
-        Register:
-            name: 'register'
         Result:
             name: 'result'
-        Comparaison:
-            name: 'comparison'
-        CompResult:
-            name: 'compresult'
+
 
 
 
@@ -109,156 +94,6 @@ NavigationLayout:
 
         Label:
             text: 'Los Fantasticos'
-
-
-<Login>
-    BoxLayout:
-        MDToolbar:
-            id: toolbar
-            title: 'Log In'
-            md_bg_color: utils.get_color_from_hex("#293149")
-            pos_hint: {"top":1,}
-            size_hint: 1, .12
-            left_action_items:
-                [["menu", lambda x: app.root.toggle_nav_drawer()]]
-
-    BoxLayout:
-        canvas:
-            Color:
-                rgb: 1, 1, 1
-            Rectangle:
-                pos: self.pos
-                size: self.width,self.height/1.12
-                source: 'inst1.png'
-        orientation: 'vertical'
-        spacing:dp(20)
-        padding:dp(30),dp(200)
-
-        TextInput:
-            id: username
-            hint_text:'username'
-            size_hint: (.7,None)
-            height: self.parent.height/14
-            pos_hint: {"center_x": .5}
-            multiline: False
-            password: False
-            halign: 'center'
-            valign: 'middle'
-
-        TextInput:
-            id: pwd
-            hint_text:'password'
-            size_hint: (.7,None)
-            height: self.parent.height/14
-            pos_hint: {"center_x": .5}
-            multiline: False
-            password: True
-            halign: 'center'
-            valign: 'middle'
-
-
-        MDRoundFlatButton:
-            text: "Submit"
-            text_color: 1,1,1,1
-            pos_hint: {"center_x": .5}
-            md_bg_color: utils.get_color_from_hex("#293149")
-            on_release: app.show_example_dialog(username.text,pwd.text)
-
-    BoxLayout:
-        canvas.before:
-            Color:
-                rgba: utils.get_color_from_hex("#293149")
-            Rectangle:
-                pos: self.pos
-                size: self.size
-        orientation: 'horizontal'
-        pos_hint:{"top":0.1, "left":1}
-        size_hint: 1,.1
-
-        Label:
-            text: 'Los Fantasticos'
-
-
-
-<Register>
-    BoxLayout:
-        MDToolbar:
-            id: toolbar
-            title: 'Registration'
-            md_bg_color: utils.get_color_from_hex("#293149")
-            pos_hint: {"top":1,}
-            size_hint: 1, .12
-            left_action_items:
-                [["menu", lambda x: app.root.toggle_nav_drawer()]]
-
-
-    BoxLayout:
-        canvas:
-            Color:
-                rgb: 1, 1, 1
-            Rectangle:
-                pos: self.pos
-                size: self.width/1,self.height/1.12
-                source: 'inst1.png'
-        orientation: 'vertical'
-        spacing:dp(20)
-        padding:dp(30),dp(150)
-
-
-
-        TextInput:
-            id: user
-            hint_text:'username'
-            size_hint: (.7,None)
-            height: self.parent.height/14
-            pos_hint: {"center_x": .5}
-            multiline: False
-            password: False
-            halign: 'center'
-            valign: 'middle'
-
-        TextInput:
-            id: password
-            hint_text:'password'
-            size_hint: (.7,None)
-            height: self.parent.height/14
-            pos_hint: {"center_x": .5}
-            multiline: False
-            password: True
-            halign: 'center'
-            valign: 'middle'
-
-        TextInput:
-            id: repeat
-            hint_text:'repeat the password'
-            size_hint: (.7,None)
-            height: self.parent.height/14
-            pos_hint: {"center_x": .5}
-            multiline: False
-            password: True
-            halign: 'center'
-            valign: 'middle'
-
-        MDRoundFlatButton:
-            text: "Submit"
-            text_color: 1,1,1,1
-            pos_hint: {"center_x": .5}
-            md_bg_color: utils.get_color_from_hex("#293149")
-            on_release: app.show_example_input_dialog(str(password.text),str(repeat.text),str(user.text))
-    BoxLayout:
-        canvas.before:
-            Color:
-                rgba: utils.get_color_from_hex("#293149")
-            Rectangle:
-                pos: self.pos
-                size: self.size
-        orientation: 'horizontal'
-        pos_hint:{"top":0.1, "left":1}
-        size_hint: 1,.1
-
-        Label:
-            text: 'Los Fantasticos'
-
 
 <Result>
     BoxLayout:
@@ -354,18 +189,6 @@ NavigationLayout:
                                             halign:'center'
                                             text:'[b]Posts[/b]'
                                             color:1,1,1,1
-                                    Label:
-                                        id: bio
-                                        markup: True
-                                        halign: 'center'
-                                        text:'[b]Biography[/b]'
-
-                                    Label:
-                                        id: ext
-                                        markup: True
-                                        halign: 'center'
-                                        text:'[b]External Links[/b]'
-
                                     Label:
                                         id: ver
                                         markup: True
