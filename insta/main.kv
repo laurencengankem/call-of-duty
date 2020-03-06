@@ -14,6 +14,7 @@ WindowManager:
 
 
 <First>
+
     BoxLayout:
         canvas:
             Color:
@@ -23,7 +24,18 @@ WindowManager:
                 size: self.width,self.height
                 source: 'inst1.png'
 
-
+    BoxLayout:
+        canvas:
+            Color:
+                rgba: utils.get_color_from_hex("#293149")
+            Rectangle:
+                pos: self.pos
+                size: self.width,self.height
+        pos_hint:{"top":1, "left":1}
+        size_hint: 1,.1
+        Label:
+            text:'instanalytics'
+            font_size: self.width/11
 
     BoxLayout:
         orientation: 'vertical'
@@ -66,9 +78,29 @@ WindowManager:
         Label:
             text: 'Los Fantasticos'
 
+
+
+
 <Result>
     BoxLayout:
         orientation:'vertical'
+
+        BoxLayout:
+            canvas:
+                Color:
+                    rgba: utils.get_color_from_hex("#293149")
+                Rectangle:
+                    pos: self.pos
+                    size: self.width,self.height
+            pos_hint:{"top":1, "left":1}
+            size_hint: 1,.1
+            Label:
+                id: user
+                text:'instanalytics'
+                font_size: self.width/11
+
+
+
 
 
         MDBottomNavigation:

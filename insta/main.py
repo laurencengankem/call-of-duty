@@ -21,6 +21,7 @@ os.environ['SSL_CERT_FILE']= certifi.where()
 
 bio=""
 account=""
+user=""
 source=""
 profile: str=""
 Followers=""
@@ -56,6 +57,7 @@ class Result(Screen):
     def on_enter(self, *args):
         req = UrlRequest(source,file_path=profile,ca_file=certifi.where(),verify=False)
         req.wait()
+        self.ids.user.text= account
         self.ids.posts.text='[b]Posts[/b] \n'+Posts
         self.ids.followers.text = '[b]Followers[/b] \n' + Followers
         self.ids.followings.text = '[b]Followings[/b] \n' + Followings
@@ -150,23 +152,21 @@ class MainApp(MDApp):
         Window.bind(on_keyboard=self.android_back_click)
 
     def android_back_click(self, window, key, *largs):
-
         if key == 27:
-            if(self.root.children[1].children[0].change()):
+            if(self.root.change()):
                 return True
 
 
     def search(self,input):
-
         try:
             if input !='':
                 input.replace(" ", "")
                 urli = endpoint.request_account_info(input)
                 req=UrlRequest(urli,ca_file=certifi.where(),verify=False)
                 req.wait()
-
-                #req2=UrlRequest('http://localhost:5000/s/'+input,ca_file=certifi.where(),verify=False)
+                #req2=UrlRequest('http://localhost:5000/s/'+input)
                 #req2.wait()
+                #print(req2.result)
                 data = req.result
                 global source
                 global profile
@@ -180,6 +180,7 @@ class MainApp(MDApp):
                 global private
                 global bio
                 global ver
+
                 account=input
                 profile = input + '.jpg'
                 source= self.profile
@@ -241,34 +242,7 @@ class MainApp(MDApp):
             dialog.open()
 
 
-    def show_example_input_dialog(self,input1,input2,input3):
 
-        if(input1!=input2):
-            dialog = MDDialog(
-                title="Error message",
-                size_hint=(0.8, 0.3),
-                text_button_ok="Ok",
-                text = "The 2 Passwords you entered are differents"
-            )
-            dialog.open()
-        elif(input1=='' or input2=='' or input3==''):
-            dialog = MDDialog(
-                title="Alert",
-                size_hint=(0.8, 0.3),
-                text_button_ok="Ok",
-                text="Fill all the fields"
-            )
-            dialog.open()
-
-    def show_example_dialog(self,input1,input2):
-        if(input1=='' or input2==''):
-            dialog = MDDialog(
-                title="Alert",
-                size_hint=(0.8, 0.3),
-                text_button_ok="Ok",
-                text = "Fill all the fields"
-            )
-            dialog.open()
 
 if __name__ == "__main__":
     MainApp().run()
