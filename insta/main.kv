@@ -1,36 +1,14 @@
 #:import utils kivy.utils
 
-NavigationLayout:
-
-    MDNavigationDrawer:
-
-        drawer_logo: 'logo.png'
-        NavigationDrawerSubheader:
-
-            id : main_win
-            icon: "arrow-all"
-            text: "Menu"
-            color: 0,0,0,1
-
-        NavigationDrawerIconButton:
-            icon: "arrow-all"
-            text:'Home'
-            on_release: manager.current= 'first'
-        NavigationDrawerIconButton:
-            icon: "arrow-all"
-            text:'Analysis'
 
 
-
-
-
-    WindowManager:
-        id:manager
-        name: 'manager'
-        First:
-            name: 'first'
-        Result:
-            name: 'result'
+WindowManager:
+    id:manager
+    name: 'manager'
+    First:
+        name: 'first'
+    Result:
+        name: 'result'
 
 
 
@@ -42,17 +20,10 @@ NavigationLayout:
                 rgb: 1, 1, 1
             Rectangle:
                 pos: self.pos
-                size: self.width,self.height/1.12
+                size: self.width,self.height
                 source: 'inst1.png'
 
-        MDToolbar:
-            id: toolbar
-            title: 'Instanalytics'
-            md_bg_color: utils.get_color_from_hex("#293149")
-            pos_hint: {"top":1,}
-            size_hint: 1, .12
-            left_action_items:
-                [["menu", lambda x: app.root.toggle_nav_drawer()]]
+
 
     BoxLayout:
         orientation: 'vertical'
@@ -98,14 +69,6 @@ NavigationLayout:
 <Result>
     BoxLayout:
         orientation:'vertical'
-        MDToolbar:
-            id: toolbar
-            title: 'Instanalytics'
-            md_bg_color: utils.get_color_from_hex("#293149")
-            pos_hint: {"top":.12,}
-            size_hint: 1, .12
-            left_action_items:
-                [["menu", lambda x: app.root.toggle_nav_drawer()]]
 
 
         MDBottomNavigation:

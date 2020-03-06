@@ -157,12 +157,14 @@ class MainApp(MDApp):
 
 
     def search(self,input):
+
         try:
             if input !='':
                 input.replace(" ", "")
                 urli = endpoint.request_account_info(input)
                 req=UrlRequest(urli,ca_file=certifi.where(),verify=False)
                 req.wait()
+
                 #req2=UrlRequest('http://localhost:5000/s/'+input,ca_file=certifi.where(),verify=False)
                 #req2.wait()
                 data = req.result
@@ -192,6 +194,7 @@ class MainApp(MDApp):
                 ver=data['graphql']['user']['is_verified']
                 private = data['graphql']['user']['is_private']
                 p=len(data['graphql']['user']['edge_owner_to_timeline_media']['edges'])
+
                 Post.clear()
                 for i in range(p):
                     url=data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['thumbnail_resources'][2]['src']
@@ -213,12 +216,13 @@ class MainApp(MDApp):
                             hashtags.pop(0)
                     type='Photo'
                     count=0
+
                     if(t):
                         type='Video'
                         count=data['graphql']['user']['edge_owner_to_timeline_media']['edges'][i]['node']['video_view_count']
 
                     Post.append({"url":url,"comments":comments,"likes":likes,"type":type,"date":str(date),"hashtags": hashtags,"shortcode":shortcode,"location":location,"view":count})
-                self.root.ids.manager.current= 'result'
+                self.root.current= 'result'
             elif(input== ''):
                 dialog = MDDialog(
                     title="Alert",
