@@ -22,7 +22,7 @@ session.headers.update(setup.header)
 def user_request(url):
     print(url)
     try:
-        req=UrlRequest(url,ca_file=certifi.where(),verify=False)
+        req=UrlRequest(url,ca_file=certifi.where(),verify=True)
         req.wait()
         print("return this result")
         print(req.result)
