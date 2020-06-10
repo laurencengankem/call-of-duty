@@ -89,8 +89,14 @@ def hello(username):
                 "\n [route.py]\t\tNo JSON were found for %s, started the download process..." % username,
                 fg="green",
             )
-        r = requests.get("http://52.87.235.106/"+username)
-        return "Username not found", 404
+        collection_username.insert_one({"username":username})
+        time.sleep(5)
+        if list(collection_profile.find(query))==0:
+            return "Username not found", 404
+        else:
+            context= list(collection_profile.find(query))[-1]
+            js = json.dumps(context, indent=4, default=json_util.default)
+            return js
 
 
 '''
