@@ -59,7 +59,7 @@ def hello(username):
                     "\n [route.py]\t\tThe cached JSON is too old, wait for the new JSON to be downloaded",
                     fg="green",
                 )
-                r = requests.get("http://127.0.0.1:5001/"+username)
+                r = requests.get("http://52.87.235.106/"+username)
                 if r.status_code==200:
                     context = list(collection_profile.find(query))[-1]
                     profile_date = context['date_time']
@@ -77,7 +77,7 @@ def hello(username):
                 else:
                     return "Username not found", 404
         else:
-            r = requests.get("http://127.0.0.1:5001/"+username)
+            r = requests.get("http://52.87.235.106/"+username)
             context= list(collection_profile.find(query))[-1]
             js = json.dumps(context, indent=4, default=json_util.default)
             return js
@@ -88,7 +88,7 @@ def hello(username):
                 "\n [route.py]\t\tNo JSON were found for %s, started the download process..." % username,
                 fg="green",
             )
-        r = requests.get("http://127.0.0.1:5001/"+username)
+        r = requests.get("http://52.87.235.106/"+username)
         return "Username not found", 404
 
 
