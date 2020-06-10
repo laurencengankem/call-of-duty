@@ -21,6 +21,7 @@ client = MongoClient('3.223.148.248', 27017)
 db = client['instadb']
 collection_profile = db['profiledb']
 collection_comment = db['commentdb']
+collection_username=db['usernamedb']
 current_date = date.today()
 
 '''
@@ -59,25 +60,25 @@ def hello(username):
                     "\n [route.py]\t\tThe cached JSON is too old, wait for the new JSON to be downloaded",
                     fg="green",
                 )
-                r = requests.get("http://52.87.235.106/"+username)
-                if r.status_code==200:
-                    context = list(collection_profile.find(query))[-1]
-                    profile_date = context['date_time']
-                    if current_date.strftime('%d') == profile_date.strftime('%d') \
-                            and profile_date.strftime('%m') == profile_date.strftime('%m'):
+                collection_username.insert_one({"username":username})
+                time.sleep(5)
+                context = list(collection_profile.find(query))[-1]
+                profile_date = context['date_time']
+                if current_date.strftime('%d') == profile_date.strftime('%d') \
+                        and profile_date.strftime('%m') == profile_date.strftime('%m'):
                         js = json.dumps(context, indent=4, default=json_util.default)
                         click.secho(
                             "\n [route.py]\t\tA recently downloaded JSON was found, no further requests will be sent",
                             fg="green",
-                        )
-                        search_stat.new_search(username)
-                        return js
-                    else:
-                        return "Username not found", 404
+                            )
+                            search_stat.new_search(username)
+                            return js
                 else:
                     return "Username not found", 404
+
         else:
-            r = requests.get("http://52.87.235.106/"+username)
+            collection_username.insert_one({"username":username})
+            time.sleep(5)
             context= list(collection_profile.find(query))[-1]
             js = json.dumps(context, indent=4, default=json_util.default)
             return js

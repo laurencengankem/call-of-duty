@@ -57,5 +57,3 @@ def request_to_username(username):
                     " [start.py>private]\tUnable to check if user is private. %s. Check if the username is correct.\n" %e,
                     fg="green",
                     )
-
-    return message
