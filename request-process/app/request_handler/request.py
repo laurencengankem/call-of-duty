@@ -9,7 +9,6 @@ import click
 def make_request(session, url):
     #r = session.get(url)
     r=requests.get("https://www.instagram.com/sarapizzz/?__a=1",auth=HTTPBasicAuth('laurencengankem@yahoo.fr', 'lol.1967'))
-
     #print(r.json())
     if r.status_code is not 200:
         click.secho(
@@ -17,6 +16,7 @@ def make_request(session, url):
             r.status_code,
             fg="green",
         )
+    print(r)
     response_as_json = r.json()
-    print("i'm here")
+
     return response_as_json
