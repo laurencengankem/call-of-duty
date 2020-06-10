@@ -13,3 +13,7 @@ def listen_to_username(username):
     print(" [x] Done")
     start.request_to_username(username)
     return "recived" , 200
+
+@app.route('/')
+def listen_to_username(username):
+    return "It's on" , 200
