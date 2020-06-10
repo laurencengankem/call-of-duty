@@ -91,10 +91,10 @@ def hello(username):
             )
         collection_username.insert_one({"username":username})
         time.sleep(5)
-        if list(collection_profile.find(query))==0:
+        if len(list(collection_profile.find(query)))==0:
             return "Username not found", 404
         else:
-            context= list(collection_profile.find(query))[-1]
+            context= list(collection_profile.find(query))[0]
             js = json.dumps(context, indent=4, default=json_util.default)
             return js
 
