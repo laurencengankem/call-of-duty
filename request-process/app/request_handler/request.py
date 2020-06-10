@@ -18,4 +18,5 @@ def make_request(session, url):
             fg="green",
         )
     response_as_json = r.json()
+    print("i'm here")
     return response_as_json
