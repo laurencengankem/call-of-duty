@@ -15,5 +15,5 @@ def listen_to_username(username):
     return "recived" , 200
 
 @app.route('/')
-def listen_to_username(username):
+def listen(username):
     return "It's on" , 200
