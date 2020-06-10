@@ -16,7 +16,7 @@ def make_request(session, url):
             r.status_code,
             fg="green",
         )
-    print(r)
+    print(r._content)
     response_as_json = r.json()
 
     return response_as_json
