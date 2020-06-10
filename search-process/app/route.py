@@ -71,8 +71,8 @@ def hello(username):
                             "\n [route.py]\t\tA recently downloaded JSON was found, no further requests will be sent",
                             fg="green",
                             )
-                            search_stat.new_search(username)
-                            return js
+                        search_stat.new_search(username)
+                        return js
                 else:
                     return "Username not found", 404
 
