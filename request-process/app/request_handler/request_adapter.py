@@ -5,6 +5,7 @@ from .request import make_request
 import time
 import click
 from kivy.network.urlrequest import UrlRequest
+import certifi
 
 '''
     Open a session setting a header. Header information is contained in setup.py
@@ -21,7 +22,7 @@ session.headers.update(setup.header)
 def user_request(url):
     print(url)
     try:
-        req=UrlRequest(urli,ca_file=certifi.where(),verify=False)
+        req=UrlRequest(url,ca_file=certifi.where(),verify=False)
         req.wait()
         #message = make_request(session, url)
         #return message
