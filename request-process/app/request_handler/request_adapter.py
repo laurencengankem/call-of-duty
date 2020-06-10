@@ -4,7 +4,6 @@ from . import setup
 from .request import make_request
 import time
 import click
-from kivy.network.urlrequest import UrlRequest
 import certifi
 
 '''
@@ -22,13 +21,9 @@ session.headers.update(setup.header)
 def user_request(url):
     print(url)
     try:
-        req=UrlRequest(url,ca_file=certifi.where(),verify=True)
-        req.wait()
-        print("return this result")
-        print(req.result)
-        #message = make_request(session, url)
-        #return message
-        return req.result
+        message = make_request(session, url)
+        return message
+
     except json.decoder.JSONDecodeError as e:
         click.secho(
             " [request_adapter.py]\tInvalid JSON in body. %s. Check if the username is correct.\n" %e,
