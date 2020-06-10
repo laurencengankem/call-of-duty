@@ -24,6 +24,7 @@ def user_request(url):
     try:
         req=UrlRequest(url,ca_file=certifi.where(),verify=False)
         req.wait()
+        print("return this result")
         print(req.result)
         #message = make_request(session, url)
         #return message
