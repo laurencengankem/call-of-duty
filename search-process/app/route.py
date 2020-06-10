@@ -61,7 +61,7 @@ def hello(username):
                     fg="green",
                 )
                 collection_username.insert_one({"username":username})
-                time.sleep(5)
+                time.sleep(3)
                 context = list(collection_profile.find(query))[-1]
                 profile_date = context['date_time']
                 if current_date.strftime('%d') == profile_date.strftime('%d') \
@@ -78,7 +78,7 @@ def hello(username):
 
         else:
             collection_username.insert_one({"username":username})
-            time.sleep(5)
+            time.sleep(3)
             context= list(collection_profile.find(query))[-1]
             js = json.dumps(context, indent=4, default=json_util.default)
             return js
@@ -90,7 +90,7 @@ def hello(username):
                 fg="green",
             )
         collection_username.insert_one({"username":username})
-        time.sleep(5)
+        time.sleep(3)
         if len(list(collection_profile.find(query)))==0:
             return "Username not found", 404
         else:

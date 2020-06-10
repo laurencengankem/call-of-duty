@@ -32,31 +32,33 @@ def listen_to_username():
     global i
     global j
     global n
+    try:
+        message = request.get_json()
 
-    message = request.get_json()
+        if message.get('logging_page_id') is not None:
+            context = get_profile.get_user_data(message)
+            collection_profile.insert_one(context)
+            'reset post_profile lists '
+            profiling.reset_profile_post()
+            profiling.reset_profile_post_1()
 
-    if message.get('logging_page_id') is not None:
-        context = get_profile.get_user_data(message)
-        collection_profile.insert_one(context)
-        'reset post_profile lists '
-        profiling.reset_profile_post()
-        profiling.reset_profile_post_1()
+        elif message.get('data', {}).get('user') != None:
+            print(" [*] START POST")
 
-    elif message.get('data', {}).get('user') != None:
-        print(" [*] START POST")
-
-    elif message.get('data', {}).get('shortcode_media') != None:
-        print(" [*] START COMMENT")
-        context_comment = get_comment.get_comment_data(message)
-        comment_has_next_page = profiling.get_comment_has_next_page(message)
-        j = j + 1
-        if not comment_has_next_page or j == 3:
-            collection_comment.insert_one(context_comment)
-            'reset comment lists '
-            profiling.reset_comment()
-            reset_i_j()
-    time.sleep(0.2)
-    return "Made",200
+        elif message.get('data', {}).get('shortcode_media') != None:
+            print(" [*] START COMMENT")
+            context_comment = get_comment.get_comment_data(message)
+            comment_has_next_page = profiling.get_comment_has_next_page(message)
+            j = j + 1
+            if not comment_has_next_page or j == 3:
+                collection_comment.insert_one(context_comment)
+                'reset comment lists '
+                profiling.reset_comment()
+                reset_i_j()
+        time.sleep(0.2)
+        return "Made",200
+    except:
+        return "problem", 404
 
 
 

@@ -22,15 +22,11 @@ def request_to_username(username):
             try:
                 user_id = parser.id_number(message)
             except KeyError as e:
-                click.secho(
-                    " [start.py>user-id]\tUnable to get user ID. %s. Check if the username is correct.\n" %e,
-                    fg="green",
-                    )
-            r=requests.post("http://127.0.0.1:5002/", json=message)
-            print(r.status_code)
+                print("[start.py>user-id]\tUnable to get user ID. %s. Check if the username is correct.\n" %e)
             try:
 
                 is_private = parser.is_private(message)
+                r=requests.post("http://127.0.0.1:5002/", json=message)
                 if not is_private:
 
                     count_post = 0
@@ -53,7 +49,4 @@ def request_to_username(username):
                             r= requests.post("http://127.0.0.1:5002/", json=comment)
                         print(" [x] Sent %r" % "COMMENT JSON N. "+str(count_end_cursor))
             except KeyError as e:
-                click.secho(
-                    " [start.py>private]\tUnable to check if user is private. %s. Check if the username is correct.\n" %e,
-                    fg="green",
-                    )
+                print(" [start.py>private]\tUnable to check if user is private. %s. Check if the username is correct.\n" )
