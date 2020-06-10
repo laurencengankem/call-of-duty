@@ -16,7 +16,8 @@ import requests
     correctly installed MongoDB and created the database and collection
 '''
 #client = MongoClient('mongodb://admin:admin@10.200.1.67/instadb', 27017)
-client = MongoClient('localhost', 27017)
+client = MongoClient('3.223.148.248', 27017)
+#client = MongoClient('localhost', 27017)
 db = client['instadb']
 collection_profile = db['profiledb']
 collection_comment = db['commentdb']
@@ -39,46 +40,55 @@ def hello(username):
         At first, it searched for the JSON of the username and, if found, doesn't send any more requests
     '''
     try:
-        context = list(collection_profile.find(query))[-1]
-        profile_date = context['date_time']
-        if current_date.strftime('%d') == profile_date.strftime('%d') \
-                and profile_date.strftime('%m') == profile_date.strftime('%m'):
-            js = json.dumps(context, indent=4, default=json_util.default)
-            click.secho(
-                "\n [route.py]\t\tA recently downloaded JSON was found, no further requests will be sent",
-                fg="green",
-            )
-            search_stat.new_search(username)
-            return js
-        else:
-            click.secho(
-                "\n [route.py]\t\tThe cached JSON is too old, wait for the new JSON to be downloaded",
-                fg="green",
-            )
-            r = requests.get("http://127.0.0.1:5001/"+username)
-            #time.sleep(5)
-            if r.status_code==200:
-                context = list(collection_profile.find(query))[-1]
-                profile_date = context['date_time']
-                if current_date.strftime('%d') == profile_date.strftime('%d') \
-                        and profile_date.strftime('%m') == profile_date.strftime('%m'):
-                    js = json.dumps(context, indent=4, default=json_util.default)
-                    click.secho(
-                        "\n [route.py]\t\tA recently downloaded JSON was found, no further requests will be sent",
-                        fg="green",
-                    )
-                    search_stat.new_search(username)
-                    return js
+
+        context = list(collection_profile.find(query))
+        if len(context)>0:
+            context= list(collection_profile.find(query))[-1]
+            profile_date = context['date_time']
+            if current_date.strftime('%d') == profile_date.strftime('%d') \
+                    and profile_date.strftime('%m') == profile_date.strftime('%m'):
+                js = json.dumps(context, indent=4, default=json_util.default)
+                click.secho(
+                    "\n [route.py]\t\tA recently downloaded JSON was found, no further requests will be sent",
+                    fg="green",
+                )
+                search_stat.new_search(username)
+                return js
+            else:
+                click.secho(
+                    "\n [route.py]\t\tThe cached JSON is too old, wait for the new JSON to be downloaded",
+                    fg="green",
+                )
+                r = requests.get("http://127.0.0.1:5001/"+username)
+                if r.status_code==200:
+                    context = list(collection_profile.find(query))[-1]
+                    profile_date = context['date_time']
+                    if current_date.strftime('%d') == profile_date.strftime('%d') \
+                            and profile_date.strftime('%m') == profile_date.strftime('%m'):
+                        js = json.dumps(context, indent=4, default=json_util.default)
+                        click.secho(
+                            "\n [route.py]\t\tA recently downloaded JSON was found, no further requests will be sent",
+                            fg="green",
+                        )
+                        search_stat.new_search(username)
+                        return js
+                    else:
+                        return "Username not found", 404
                 else:
                     return "Username not found", 404
-            else:
-                return "Username not found", 404
+        else:
+            r = requests.get("http://127.0.0.1:5001/"+username)
+            context= list(collection_profile.find(query))[-1]
+            js = json.dumps(context, indent=4, default=json_util.default)
+            return js
+
 
     except IndexError:
         click.secho(
                 "\n [route.py]\t\tNo JSON were found for %s, started the download process..." % username,
                 fg="green",
             )
+        r = requests.get("http://127.0.0.1:5001/"+username)
         return "Username not found", 404
 
 
