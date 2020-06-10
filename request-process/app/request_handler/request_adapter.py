@@ -22,6 +22,7 @@ def user_request(url):
     print(url)
     try:
         message = make_request(session, url)
+        print(message)
         return message
 
     except json.decoder.JSONDecodeError as e:
