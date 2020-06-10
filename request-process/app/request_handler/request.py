@@ -8,6 +8,7 @@ import click
 def make_request(session, url):
     #r = session.get(url)
     r = requests.get(url)
+    print(r.status_code)
     if r.status_code is not 200:
         click.secho(
             "\n [request.py]\t\tResponse is invalid, returned %s error. Check if the username is correct." %
