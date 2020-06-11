@@ -61,7 +61,7 @@ def listen_to_username():
         return "problem", 404
 
 
-@app.route(/):
+@app.route(/)
 def test():
     return "you're in parser-process", 200
 
