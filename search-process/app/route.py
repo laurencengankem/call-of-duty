@@ -21,7 +21,7 @@ client = MongoClient('3.223.148.248', 27017)
 db = client['instadb']
 collection_profile = db['profiledb']
 collection_comment = db['commentdb']
-collection_username=db['usernamedb']
+collection_username=db['username2']
 current_date = date.today()
 
 '''

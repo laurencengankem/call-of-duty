@@ -20,7 +20,7 @@ i = 0
 j = 0
 n = 0
 
-@app.route('/', methods=['POST'])
+@app.route('/s', methods=['POST'])
 def listen_to_username():
     #client = MongoClient('mongodb://admin:admin@10.200.1.67/instadb', 27017)
     #client = MongoClient('localhost', 27017)
@@ -61,6 +61,9 @@ def listen_to_username():
         return "problem", 404
 
 
+@app.route(/):
+def test():
+    return "you're in parser-process", 200
 
 
 @app.route('/sentiment', methods=['POST'])
