@@ -70,8 +70,15 @@ def hello(username):
                         client.close()
                         return js
                     else:
-                        client.close()
-                        return  "User not found", 200
+                        time.sleep(2)
+                        context = list(collection_profile.find(query))
+                        if len(context)>0:
+                            js = json.dumps(context[0], indent=4, default=json_util.default)
+                            client.close()
+                            return js
+                        else:
+                            client.close()
+                            return  "User not found", 200
     except:
         client.close()
         return  "User not found", 200
