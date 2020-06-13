@@ -5,6 +5,7 @@ from pymongo import MongoClient
 client = MongoClient('3.223.148.248', 27017)
 db = client['instadb']
 collection_username= db['usernamedb']
+collection_username.delete_many({})
 
 while True:
     collection_username= db['usernamedb']

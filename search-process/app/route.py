@@ -21,7 +21,7 @@ client = MongoClient('3.223.148.248', 27017)
 db = client['instadb']
 collection_profile = db['profiledb']
 collection_comment = db['commentdb']
-collection_username=db['username2']
+collection_username=db['usernamedb']
 current_date = date.today()
 
 '''
@@ -44,59 +44,40 @@ def hello(username):
 
         context = list(collection_profile.find(query))
         if len(context)>0:
-            context= list(collection_profile.find(query))[-1]
-            profile_date = context['date_time']
-            if current_date.strftime('%d') == profile_date.strftime('%d') \
-                    and profile_date.strftime('%m') == profile_date.strftime('%m'):
-                js = json.dumps(context, indent=4, default=json_util.default)
-                click.secho(
-                    "\n [route.py]\t\tA recently downloaded JSON was found, no further requests will be sent",
-                    fg="green",
-                )
-                search_stat.new_search(username)
-                return js
-            else:
-                click.secho(
-                    "\n [route.py]\t\tThe cached JSON is too old, wait for the new JSON to be downloaded",
-                    fg="green",
-                )
-                collection_username.insert_one({"username":username})
-                time.sleep(4)
-                context = list(collection_profile.find(query))[-1]
-                profile_date = context['date_time']
-                if current_date.strftime('%d') == profile_date.strftime('%d') \
-                        and profile_date.strftime('%m') == profile_date.strftime('%m'):
-                        js = json.dumps(context, indent=4, default=json_util.default)
-                        click.secho(
-                            "\n [route.py]\t\tA recently downloaded JSON was found, no further requests will be sent",
-                            fg="green",
-                            )
-                        search_stat.new_search(username)
-                        return js
-                else:
-                    return "Username not found", 404
-
+            js = json.dumps(context[0], indent=4, default=json_util.default)
+            client.close()
+            return js
         else:
             collection_username.insert_one({"username":username})
             time.sleep(4)
-            context= list(collection_profile.find(query))[-1]
-            js = json.dumps(context, indent=4, default=json_util.default)
-            return js
+            context = list(collection_profile.find(query))
+            if len(context)>0:
+                js = json.dumps(context[0], indent=4, default=json_util.default)
+                client.close()
+                return js
+            else:
+                time.sleep(2)
+                context = list(collection_profile.find(query))
+                if len(context)>0:
+                    js = json.dumps(context[0], indent=4, default=json_util.default)
+                    client.close()
+                    return js
+                else:
+                    time.sleep(2)
+                    context = list(collection_profile.find(query))
+                    if len(context)>0:
+                        js = json.dumps(context[0], indent=4, default=json_util.default)
+                        client.close()
+                        return js
+                    else:
+                        client.close()
+                        return  "User not found", 200
+    except:
+        client.close()
+        return  "User not found", 200
 
 
-    except IndexError:
-        click.secho(
-                "\n [route.py]\t\tNo JSON were found for %s, started the download process..." % username,
-                fg="green",
-            )
-        collection_username.insert_one({"username":username})
-        time.sleep(4)
-        if len(list(collection_profile.find(query)))==0:
-            return "Username not found", 404
-        else:
-            context= list(collection_profile.find(query))[0]
-            js = json.dumps(context, indent=4, default=json_util.default)
-            return js
+
 
 
 '''
@@ -115,6 +96,7 @@ def post_javascript_data(shortcode):
     r = requests.post('http://127.0.0.1:5002/sentiment', data = json_comment)
     sentiment_json = r.content
     print(sentiment_json)
+    client.close()
     return sentiment_json
 
 '''

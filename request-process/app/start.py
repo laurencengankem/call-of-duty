@@ -26,7 +26,7 @@ def request_to_username(username):
             try:
 
                 is_private = parser.is_private(message)
-                r=requests.post("http://127.0.0.1:5002/", json=message)
+                r=requests.post("http://parser-process-lb-498177820.us-east-1.elb.amazonaws.com/s", json=message)
                 if not is_private:
 
                     count_post = 0
@@ -36,7 +36,7 @@ def request_to_username(username):
                         comment = rq.comment_media_request(endpoint.request_comment(shortcode, ''))
                         end_cursor = parser.end_cursor_comment(comment)
                         comment['shortcode'] = shortcode
-                        r= requests.post("http://127.0.0.1:5002/", json=comment)
+                        r= requests.post("http://parser-process-lb-498177820.us-east-1.elb.amazonaws.com/s", json=comment)
                         count_end_cursor = 0
 
                         while not end_cursor is None:
@@ -46,7 +46,7 @@ def request_to_username(username):
                             comment = rq.comment_media_request(endpoint.request_comment(shortcode, end_cursor))
                             end_cursor = parser.end_cursor_comment(comment)
                             comment['shortcode'] = shortcode
-                            r= requests.post("http://127.0.0.1:5002/", json=comment)
+                            r= requests.post("http://parser-process-lb-498177820.us-east-1.elb.amazonaws.com/s", json=comment)
                         print(" [x] Sent %r" % "COMMENT JSON N. "+str(count_end_cursor))
             except KeyError as e:
                 print(" [start.py>private]\tUnable to check if user is private. %s. Check if the username is correct.\n" )
