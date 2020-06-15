@@ -56,8 +56,10 @@ def listen_to_username():
                 profiling.reset_comment()
                 reset_i_j()
         time.sleep(0.2)
+        client.close()
         return "Made",200
     except:
+        client.close()
         return "problem", 404
 
 
